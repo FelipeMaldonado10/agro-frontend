@@ -1,0 +1,11 @@
+<nav>
+  <a routerLink="/dashboard" routerLinkActive="active" *ngIf="user">Dashboard</a>
+  <a routerLink="/user-management" routerLinkActive="active" *ngIf="user?.rol === 'superadmin'">Gestión de Usuarios</a>
+  <a routerLink="/login" routerLinkActive="active" *ngIf="!user">Login</a>
+  <a routerLink="/register" routerLinkActive="active" *ngIf="!user">Registro</a>
+  <span *ngIf="user">
+    | {{ user.email }} ({{ user.rol }})
+    <button (click)="logout()">Cerrar sesión</button>
+  </span>
+</nav>
+<hr>

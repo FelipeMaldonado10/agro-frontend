@@ -1,0 +1,26 @@
+<h2>Gestión de Usuarios</h2>
+<a routerLink="/user-management/create">Crear usuario</a>
+<div *ngIf="error" style="color:red;">{{ error }}</div>
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.nombre }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.rol }}</td>
+      <td>{{ user.estado }}</td>
+      <td>
+        <a [routerLink]="['/user-management/edit', user._id]">Editar</a>
+        <button (click)="deleteUser(user._id)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
