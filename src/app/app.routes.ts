@@ -13,7 +13,7 @@ export const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'user-management', component: UserListComponent, canActivate: [SuperadminGuard] },
     { path: 'user-management/create', component: UserFormComponent, canActivate: [SuperadminGuard] },
-    { path: 'user-management/edit/:id', component: UserFormComponent, canActivate: [SuperadminGuard] },
+    { path: 'user-management/edit/:id', component: UserFormComponent, canActivate: [SuperadminGuard], data: { renderMode: 'client' } },
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: '**', redirectTo: '/dashboard' }
 ];
