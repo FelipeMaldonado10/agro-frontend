@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://agro-backend-r4sb.onrender.com/api' // Production API URL
+    apiUrl: 'https://agro-backend-qjcn.onrender.com/api' // Production API URL
 };
