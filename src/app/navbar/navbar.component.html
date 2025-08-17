@@ -4,7 +4,7 @@
   <a routerLink="/login" routerLinkActive="active" *ngIf="!user">Login</a>
   <a routerLink="/register" routerLinkActive="active" *ngIf="!user">Registro</a>
   <span *ngIf="user">
-    | {{ user.email }} ({{ user.rol }})
+    | {{ user.nombre || user.email }} ({{ user.rol }})
     <button (click)="logout()">Cerrar sesión</button>
   </span>
 </nav>
