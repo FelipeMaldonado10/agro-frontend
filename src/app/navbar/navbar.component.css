@@ -1,45 +1,93 @@
 nav {
-  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
-  padding: 1rem;
+  background: linear-gradient(90deg, #43a047 0%, #66bb6a 100%);
+  padding: 1.2rem 2rem;
+  position: relative;
+  box-shadow: 0 2px 12px rgba(67,160,71,0.10);
+  min-height: 70px;
+  overflow: hidden;
 }
 
 nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: center;
+  gap: 2rem;
+  justify-content: flex-end;
   margin: 0;
   padding: 0;
   list-style: none;
 }
- nav li {
-  min-width: 70px;
+
+nav li {
+  min-width: 80px;
   text-align: center;
 }
+
 nav a {
-  color: white;
+  color: #fff;
   text-decoration: none;
-  font-family: 'Times New Roman', Times, serif;
-  font-weight: 500;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  font-weight: 600;
   font-size: 1.1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background 0.3s;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  transition: background 0.3s, color 0.3s;
   cursor: pointer;
+  letter-spacing: 0.5px;
 }
 
 nav a:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: #b9f6ca;
+  color: #388e3c;
 }
 
 nav a.active {
-  background: rgba(255, 255, 255, 0.2);
-  border-bottom: 3px solid #fff;
+  background: #66bb6a;
+  color: #fff;
+  border-bottom: 3px solid #43a047;
+}
+
+/* Formas decorativas verdes animadas en la navbar */
+nav::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: -40px;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #b9f6ca 60%, #43a047 100%);
+  border-radius: 50%;
+  opacity: 0.18;
+  z-index: 0;
+  animation: floatShape 6s infinite alternate;
+}
+
+nav::after {
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  right: -40px;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #66bb6a 60%, #b9f6ca 100%);
+  border-radius: 50%;
+  opacity: 0.14;
+  z-index: 0;
+  animation: floatShapeReverse 7s infinite alternate;
+}
+
+@keyframes floatShape {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(20px) scale(1.08); }
+}
+
+@keyframes floatShapeReverse {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-20px) scale(1.12); }
 }
 
 @media (max-width: 600px) {
   nav ul {
-    gap: 0.5rem;
+    gap: 0.7rem;
   }
   nav li {
     min-width: 60px;

@@ -1,51 +1,82 @@
+/* Estilos verdes y formas decorativas para login */
 .login-container {
   max-width: 400px;
   margin: 2rem auto;
-  background: #fff;
+  background: #b9f6ca;
   padding: 2rem 2.5rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px rgba(67,160,71,0.15);
+  position: relative;
+  overflow: hidden;
 }
 .login-container h2 {
-  color: #1976d2;
+  color: #43a047;
   text-align: center;
   margin-bottom: 1.5rem;
+  font-weight: bold;
 }
 .form-group {
   margin-bottom: 1.2rem;
 }
 .form-group label {
   display: block;
-  color: #37474f;
+  color: #388e3c;
   margin-bottom: 0.5rem;
 }
 .form-group input {
   width: 100%;
   padding: 0.6rem;
-  border: 1px solid #bdbdbd;
+  border: 1px solid #66bb6a;
   border-radius: 0.7rem;
   font-size: 1rem;
-  background: #f8f9fa;
+  background: #e8f5e9;
   margin-bottom: 0.2rem;
 }
 button[type="submit"] {
   width: 100%;
   padding: 0.8rem;
-  background: #1976d2;
+  background: linear-gradient(90deg, #43a047 60%, #66bb6a 100%);
   color: #fff;
   border: none;
-  border-radius: 1rem;
+  border-radius: 1.2rem;
   font-size: 1.1rem;
   cursor: pointer;
   margin-top: 1rem;
-  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(67,160,71,0.15);
+  transition: background 0.2s, box-shadow 0.2s;
 }
 button[type="submit"]:hover {
-  background: #1565c0;
+  background: linear-gradient(90deg, #388e3c 60%, #43a047 100%);
+  box-shadow: 0 4px 16px rgba(67,160,71,0.25);
 }
 .error {
   color: #d32f2f;
   font-size: 0.95rem;
   margin-top: 0.2rem;
   text-align: center;
+}
+/* Formas decorativas verdes */
+.login-container::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, #43a047 60%, #b9f6ca 100%);
+  border-radius: 50%;
+  opacity: 0.25;
+  z-index: 0;
+}
+.login-container::after {
+  content: "";
+  position: absolute;
+  bottom: -40px;
+  right: -40px;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #66bb6a 60%, #b9f6ca 100%);
+  border-radius: 50%;
+  opacity: 0.18;
+  z-index: 0;
 }
