@@ -13,12 +13,14 @@ export class NavbarComponent {
   user: any;
   isLoggedIn = false;
   isSuperadmin = false;
+  menuOpen = false;
 
   constructor(private auth: AuthService, private router: Router) {
     this.updateUser();
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updateUser();
+        this.menuOpen = false; // Cierra el menú al navegar
       }
     });
   }
@@ -29,13 +31,18 @@ export class NavbarComponent {
     this.isSuperadmin = this.user?.rol === 'superadmin';
   }
 
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
   closeNavbar() {
-    // Opcional: para cerrar el menú en móvil, si usas Bootstrap JS
+    this.menuOpen = false;
   }
 
   logout() {
     this.auth.logout();
     this.updateUser();
     this.router.navigate(['/login']);
+    this.menuOpen = false;
   }
 }
