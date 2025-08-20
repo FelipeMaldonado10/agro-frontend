@@ -1,0 +1,75 @@
+/* Estilos verdes y decorativos para el dashboard */
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #e8f5e9 70%, #b9f6ca 100%);
+  position: relative;
+  padding: 3em 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+.dashboard-title {
+  color: #43a047;
+  font-size: 2.2em;
+  font-weight: bold;
+  margin-bottom: 1em;
+  text-align: center;
+  animation: fadeInDown 1s;
+}
+.dashboard-card {
+  background: #b9f6ca;
+  border-radius: 1.5em;
+  box-shadow: 0 4px 24px rgba(67,160,71,0.12);
+  padding: 2em;
+  margin-bottom: 2em;
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 1.2s;
+}
+/* Formas decorativas animadas */
+.dashboard-container::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, #43a047 60%, #b9f6ca 100%);
+  border-radius: 50%;
+  opacity: 0.18;
+  z-index: 0;
+  animation: floatShape 7s infinite alternate;
+}
+.dashboard-container::after {
+  content: "";
+  position: absolute;
+  bottom: -60px;
+  right: -60px;
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(135deg, #66bb6a 60%, #b9f6ca 100%);
+  border-radius: 50%;
+  opacity: 0.14;
+  z-index: 0;
+  animation: floatShapeReverse 8s infinite alternate;
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatShape {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(30px) scale(1.08); }
+}
+@keyframes floatShapeReverse {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-30px) scale(1.12); }
+}

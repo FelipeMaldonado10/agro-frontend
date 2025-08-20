@@ -1,1 +1,64 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Estilos globales con tonos verdes modernos */
+:root {
+  --primary-green: #43a047;
+  --secondary-green: #66bb6a;
+  --accent-green: #b9f6ca;
+  --background: #f1f8e9;
+  --text-dark: #1b5e20;
+  --text-light: #ffffff;
+}
+
+body {
+  background: var(--background);
+  color: var(--text-dark);
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+button, .btn {
+  background: var(--primary-green);
+  color: var(--text-light);
+  border: none;
+  border-radius: 6px;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.15);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+button:hover, .btn:hover {
+  background: var(--secondary-green);
+  box-shadow: 0 4px 16px rgba(67, 160, 71, 0.25);
+}
+
+input, select, textarea {
+  border: 1px solid var(--secondary-green);
+  border-radius: 4px;
+  padding: 0.5em;
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+
+.card {
+  background: var(--accent-green);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.10);
+  padding: 1.5em;
+  margin: 1em 0;
+}
+
+.navbar {
+  background: var(--primary-green);
+  color: var(--text-light);
+  padding: 1em 2em;
+  box-shadow: 0 2px 8px rgba(67, 160, 71, 0.10);
+}
+
+h1, h2, h3, h4, h5 {
+  color: var(--primary-green);
+  margin-top: 0;
+}
