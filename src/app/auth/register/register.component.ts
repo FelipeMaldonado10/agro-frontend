@@ -31,21 +31,7 @@ export class RegisterComponent {
       this.error = 'Por favor completa todos los campos correctamente.';
       return;
     }
-    const role = this.registerForm.value.role;
     let data = { ...this.registerForm.value };
-    // Si es integral o satélite, los campos de empresa son obligatorios
-    if (role === 'integral' || role === 'satellite') {
-      if (!data.enterpriseName) {
-        this.error = 'Debes completar los datos de la empresa.';
-        return;
-      }
-      data.enterpriseType = role; // Solo aquí se agrega enterpriseType
-    } else {
-      // Si es cliente, limpiar campos de empresa
-      data.enterpriseName = '';
-      data.enterpriseLocation = '';
-      data.enterpriseDescription = '';
-    }
     this.loading = true;
     this.auth.register(data).subscribe({
       next: (res) => {

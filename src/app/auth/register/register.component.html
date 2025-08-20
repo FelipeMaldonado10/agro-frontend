@@ -2,8 +2,8 @@
   <h2>Registro de Usuario</h2>
   <form [formGroup]="registerForm" (ngSubmit)="submit()">
     <div class="form-group">
-      <label for="name">Nombre</label>
-      <input id="name" formControlName="name" type="text" placeholder="Nombre completo" />
+      <label for="nombre">Nombre</label>
+      <input id="nombre" formControlName="nombre" type="text" placeholder="Nombre completo" />
       <div class="error" *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched">
         El nombre es obligatorio y debe tener al menos 3 caracteres.
       </div>
