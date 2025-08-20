@@ -1,0 +1,49 @@
+nav {
+  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+  padding: 1rem;
+}
+
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+ nav li {
+  min-width: 70px;
+  text-align: center;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+nav a.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-bottom: 3px solid #fff;
+}
+
+@media (max-width: 600px) {
+  nav ul {
+    gap: 0.5rem;
+  }
+  nav li {
+    min-width: 60px;
+    font-size: 0.95rem;
+  }
+}
+

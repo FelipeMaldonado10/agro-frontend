@@ -11,7 +11,11 @@ import { RouterLink } from '@angular/router';
 })
 export class UserListComponent implements OnInit {
   users: any[] = [];
-  error = '';
+  loading = false;
+  error: string = '';
+  success: string = '';
+  editUserId: string | null = null;
+  editForm: any = {};
 
   constructor(private userService: UserManagementService) {}
 
@@ -20,17 +24,60 @@ export class UserListComponent implements OnInit {
   }
 
   loadUsers() {
+    this.loading = true;
+    this.error = '';
+    this.success = '';
     this.userService.getUsers().subscribe({
-      next: (res) => this.users = res,
-      error: (err) => this.error = err.error?.message || 'Error al cargar usuarios'
+      next: (res) => {
+        this.users = res;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = err.error?.message || 'Error al cargar usuarios';
+        this.loading = false;
+      }
+    });
+  }
+
+  startEdit(user: any) {
+    this.editUserId = user._id;
+    this.editForm = { ...user };
+    this.success = '';
+    this.error = '';
+  }
+
+  cancelEdit() {
+    this.editUserId = null;
+    this.editForm = {};
+  }
+
+  saveEdit(id: string) {
+    this.userService.updateUser(id, this.editForm).subscribe({
+      next: () => {
+        this.success = 'Usuario actualizado correctamente';
+        this.error = '';
+        this.editUserId = null;
+        this.loadUsers();
+      },
+      error: (err) => {
+        this.error = err.error?.message || 'Error al actualizar usuario';
+        this.success = '';
+      }
     });
   }
 
   deleteUser(id: string) {
     if (confirm('¿Eliminar usuario?')) {
       this.userService.deleteUser(id).subscribe({
-        next: () => this.loadUsers(),
-        error: (err) => this.error = err.error?.message || 'Error al eliminar usuario'
+        next: () => {
+          this.success = 'Usuario eliminado correctamente';
+          this.error = '';
+          this.loadUsers();
+        },
+        error: (err) => {
+          this.error = err.error?.message || 'Error al eliminar usuario';
+          this.success = '';
+        }
       });
     }
   }

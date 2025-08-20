@@ -1,0 +1,51 @@
+.login-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.login-container h2 {
+  color: #1976d2;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.form-group {
+  margin-bottom: 1.2rem;
+}
+.form-group label {
+  display: block;
+  color: #37474f;
+  margin-bottom: 0.5rem;
+}
+.form-group input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.7rem;
+  font-size: 1rem;
+  background: #f8f9fa;
+  margin-bottom: 0.2rem;
+}
+button[type="submit"] {
+  width: 100%;
+  padding: 0.8rem;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+button[type="submit"]:hover {
+  background: #1565c0;
+}
+.error {
+  color: #d32f2f;
+  font-size: 0.95rem;
+  margin-top: 0.2rem;
+  text-align: center;
+}

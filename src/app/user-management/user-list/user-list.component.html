@@ -1,26 +1,39 @@
-<h2>Gestión de Usuarios</h2>
-<a routerLink="/user-management/create">Crear usuario</a>
-<div *ngIf="error" style="color:red;">{{ error }}</div>
-<table>
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Email</th>
-      <th>Rol</th>
-      <th>Estado</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.nombre }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.rol }}</td>
-      <td>{{ user.estado }}</td>
-      <td>
-        <a [routerLink]="['/user-management/edit', user._id]">Editar</a>
-        <button (click)="deleteUser(user._id)">Eliminar</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div *ngIf="loading" class="text-center my-4">
+  <div class="spinner-border text-primary" role="status"></div>
+  <div>Cargando usuarios...</div>
+</div>
+<div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+<div class="alert alert-success" *ngIf="success">{{ success }}</div>
+
+<div *ngIf="!loading && users.length" class="user-grid mt-4">
+  <div class="grid-header">Nombre</div>
+  <div class="grid-header">Correo</div>
+  <div class="grid-header">Rol</div>
+  <div class="grid-header">Estado</div>
+  <div class="grid-header">Acciones</div>
+
+  <ng-container *ngFor="let user of users">
+    <div class="grid-item">{{ user.nombre }}</div>
+    <div class="grid-item">{{ user.email }}</div>
+    <div class="grid-item">{{ user.rol }}</div>
+    <div class="grid-item">
+      <span [class]="user.estado === 'activo' ? 'badge bg-success' : 'badge bg-secondary'">
+        {{ user.estado | titlecase }}
+      </span>
+    </div>
+    <div class="grid-item">
+      <button class="btn btn-primary btn-sm me-2" [routerLink]="['/user-management/edit', user._id]">
+        <i class="bi bi-pencil"></i> Editar
+      </button>
+      <button class="btn btn-danger btn-sm" (click)="deleteUser(user._id)">
+        <i class="bi bi-trash"></i> Eliminar
+      </button>
+    </div>
+  </ng-container>
+</div>
+<div *ngIf="!loading && !users.length" class="text-center text-muted mt-4">
+  No hay usuarios registrados.
+</div>
+<div>
+  <button class="btn btn-primary" [routerLink]="['/user-management/create']">Crear Usuario</button>
+</div>

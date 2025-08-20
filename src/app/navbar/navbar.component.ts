@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 })
 export class NavbarComponent {
   user: any;
+  isLoggedIn = false;
+  isSuperadmin = false;
 
   constructor(private auth: AuthService, private router: Router) {
     this.updateUser();
@@ -23,6 +25,12 @@ export class NavbarComponent {
 
   updateUser() {
     this.user = this.auth.getUserInfo();
+    this.isLoggedIn = !!this.user;
+    this.isSuperadmin = this.user?.rol === 'superadmin';
+  }
+
+  closeNavbar() {
+    // Opcional: para cerrar el menú en móvil, si usas Bootstrap JS
   }
 
   logout() {

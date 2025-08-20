@@ -1,0 +1,27 @@
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.grid-header {
+  font-weight: bold;
+  background: #0d6efd;
+  color: #fff;
+  padding: 0.5rem;
+  border-radius: 4px 4px 0 0;
+  text-align: center;
+}
+.grid-item {
+  background: #fff;
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  align-self: center;
+}
+.btn {
+  min-width: 80px;
+}

@@ -13,8 +13,8 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/login`, { email, password });
   }
 
-  register(nombre: string, email: string, password: string, rol: string = 'productor'): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, { nombre, email, password, rol });
+  register(data: any, rol: string = 'productor'): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, { ...data, rol });
   }
 
   getUserInfo() {

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserManagementService } from '../user-management.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-user-form',
@@ -19,7 +20,8 @@ export class UserFormComponent implements OnInit {
   constructor(
     private userService: UserManagementService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -34,6 +36,10 @@ export class UserFormComponent implements OnInit {
       });
     }
   }
+    cancel() {
+      this.location.back();
+    }
+
 
   onSubmit() {
     if (this.isEdit) {

@@ -1,23 +1,36 @@
-<h2>{{ isEdit ? 'Editar' : 'Crear' }} Usuario</h2>
-<form (ngSubmit)="onSubmit()" #userForm="ngForm">
-  <label>Nombre:</label>
-  <input type="text" name="nombre" [(ngModel)]="user.nombre" required /><br />
-  <label>Email:</label>
-  <input type="email" name="email" [(ngModel)]="user.email" required /><br />
-  <label>Contraseña:</label>
-  <input type="password" name="password" [(ngModel)]="user.password" [required]="!isEdit" /><br />
-  <label>Rol:</label>
-  <select name="rol" [(ngModel)]="user.rol" required>
-    <option value="productor">Productor</option>
-    <option value="admin">Admin</option>
-    <option value="superadmin">Superadmin</option>
-  </select><br />
-  <label>Estado:</label>
-  <select name="estado" [(ngModel)]="user.estado" required>
-    <option value="activo">Activo</option>
-    <option value="inactivo">Inactivo</option>
-  </select><br />
-  <button type="submit">{{ isEdit ? 'Actualizar' : 'Crear' }}</button>
-  <div *ngIf="error" style="color:red;">{{ error }}</div>
-  <div *ngIf="success" style="color:green;">{{ success }}</div>
-</form>
+<div class="register-container">
+  <h2>{{ isEdit ? 'Editar' : 'Crear' }} Usuario</h2>
+  <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+    <div class="form-group">
+      <label>Nombre:</label>
+      <input type="text" name="nombre" [(ngModel)]="user.nombre" required /><br />
+    </div>
+    <div class="form-group">
+      <label>Email:</label>
+      <input type="email" name="email" [(ngModel)]="user.email" required /><br />
+    </div>
+    <div class="form-group">
+      <label>Contraseña:</label>
+      <input type="password" name="password" [(ngModel)]="user.password" [required]="!isEdit" /><br />
+    </div>
+    <div class="form-group">
+      <label>Rol:</label>
+      <select name="rol" [(ngModel)]="user.rol" required>
+        <option value="productor">Productor</option>
+        <option value="admin">Admin</option>
+        <option value="superadmin">Superadmin</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Estado:</label>
+      <select name="estado" [(ngModel)]="user.estado" required>
+        <option value="activo">Activo</option>
+        <option value="inactivo">Inactivo</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success">{{ isEdit ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" class="btn btn-danger btn-sm" (click)="cancel()">Cancelar</button>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <div *ngIf="success" class="success">{{ success }}</div>
+  </form>
+</div>
