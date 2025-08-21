@@ -21,6 +21,9 @@
         <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/user-management" routerLinkActive="active">Gestión de Usuarios</a>
         </li>
+        <li class="nav-item" *ngIf="isLoggedIn && isAdmin" (click)="closeNavbar()">
+          <a class="nav-link" routerLink="/ciudades" routerLinkActive="active">Gestión de Ciudades</a>
+        </li>
         <li class="nav-item" *ngIf="isLoggedIn" (click)="closeNavbar()">
           <a class="nav-link" (click)="logout()">Cerrar sesión</a>
         </li>
