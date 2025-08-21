@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:4000/api'
+    production: true,
+    apiUrl: 'https://agro-backend-qjcn.onrender.com/api' // Production API URL
 };
