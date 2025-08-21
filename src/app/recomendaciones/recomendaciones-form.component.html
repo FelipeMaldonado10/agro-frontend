@@ -1,9 +1,11 @@
 <form [formGroup]="form" (ngSubmit)="consultar()" class="p-3 border rounded bg-light mb-3">
   <h4>Consultar recomendaciones</h4>
+
   <div class="mb-2">
     <label>Ciudad</label>
     <input formControlName="ciudad" class="form-control" />
   </div>
+
   <div class="mb-2">
     <label>Fecha</label>
     <input formControlName="fecha" type="date" class="form-control" />
