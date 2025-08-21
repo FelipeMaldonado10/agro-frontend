@@ -21,6 +21,15 @@
         <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/user-management" routerLinkActive="active">Gestión de Usuarios</a>
         </li>
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin" (click)="closeNavbar()">
+          <a class="nav-link" routerLink="/productos/nuevo" routerLinkActive="active">Registrar Producto</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin" (click)="closeNavbar()">
+          <a class="nav-link" routerLink="/precios/nuevo" routerLinkActive="active">Registrar Precio Histórico</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn" (click)="closeNavbar()">
+          <a class="nav-link" routerLink="/recomendaciones" routerLinkActive="active">Recomendaciones</a>
+        </li>
         <li class="nav-item" *ngIf="isLoggedIn" (click)="closeNavbar()">
           <a class="nav-link" (click)="logout()">Cerrar sesión</a>
         </li>
