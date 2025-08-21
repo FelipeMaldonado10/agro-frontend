@@ -13,6 +13,9 @@ import { ParcelaFormComponent } from './parcelas/parcela-form/parcela-form.compo
 import { ParcelaListComponent } from './parcelas/parcela-list/parcela-list.component';
 import { UserFormComponent } from './user-management/user-form/user-form.component';
 import { UserListComponent } from './user-management/user-list/user-list.component';
+import { marketPricesManagementRoutes } from './market-prices-management/market-prices-management.routes';
+import { productoManagementRoutes } from './producto-management/producto-management.routes';
+import { recomendacionesRoutes } from './recomendaciones/recomendaciones.routes';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -30,6 +33,11 @@ export const routes: Routes = [
     { path: 'parcelas/crear', component: ParcelaFormComponent, canActivate: [ProductorGuard] },
     { path: 'parcelas/:id', component: ParcelaDetailComponent, canActivate: [ProductorGuard] },
     { path: 'parcelas/editar/:id', component: ParcelaFormComponent, canActivate: [ProductorGuard] },
+    // Rutas de Precios de Mercado
+    ...marketPricesManagementRoutes,
+    ...productoManagementRoutes,
+    ...recomendacionesRoutes,
+
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: '**', redirectTo: '/dashboard' }
 ];
