@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ProductoService, Producto } from './producto.service';
 import { Subscription } from 'rxjs';
+import { Producto, ProductoService } from './producto.service';
 
 @Component({
   selector: 'app-producto-list',
@@ -28,7 +28,7 @@ import { Subscription } from 'rxjs';
           <div class="card h-100 producto-card">
             <div class="card-body">
               <h5 class="card-title">{{ producto.nombre }}</h5>
-              
+
               <div class="info-section">
                 <h6>Condiciones Óptimas</h6>
                 <p>
