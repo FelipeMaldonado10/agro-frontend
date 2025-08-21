@@ -1,6 +1,5 @@
 <div class="market-prices-container">
   <h2>Gestión de Precios Históricos</h2>
-
   <form [formGroup]="form" (ngSubmit)="submitForm()" class="price-form">
     <input formControlName="producto" placeholder="Producto" required>
     <input formControlName="fecha" type="date" placeholder="Fecha" required>
@@ -9,14 +8,12 @@
     <input formControlName="departamento" placeholder="Departamento">
     <button type="submit" [disabled]="form.invalid">Agregar manualmente</button>
   </form>
-
   <div class="file-upload">
     <label for="file">Subir archivo Excel/CSV:</label>
     <input id="file" type="file" (change)="onFileChange($event)" accept=".xlsx,.xls,.csv">
     <span *ngIf="uploading">Subiendo archivo...</span>
     <span class="error" *ngIf="fileError">{{ fileError }}</span>
   </div>
-
   <h3>Registros actuales</h3>
   <table class="prices-table">
     <thead>
