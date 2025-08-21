@@ -1,21 +1,18 @@
 import { Component } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+
 
 @Component({
   selector: 'app-market-prices',
   templateUrl: './market-prices.component.html',
+
   styleUrls: ['./market-prices.component.css'],
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule]
-})
-export class MarketPricesComponent {
-  prices: any[] = [];
-  form: FormGroup;
-  uploading = false;
-  fileError = '';
+  styleUrls: ['./market-prices.component.css']
 
   constructor(private http: HttpClient, private fb: FormBuilder) {
     this.form = this.fb.group({

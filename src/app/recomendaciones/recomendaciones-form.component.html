@@ -1,0 +1,26 @@
+<form [formGroup]="form" (ngSubmit)="consultar()" class="p-3 border rounded bg-light mb-3">
+  <h4>Consultar recomendaciones</h4>
+  <div class="mb-2">
+    <label>Ciudad</label>
+    <input formControlName="ciudad" class="form-control" />
+  </div>
+  <div class="mb-2">
+    <label>Fecha</label>
+    <input formControlName="fecha" type="date" class="form-control" />
+  </div>
+  <button class="btn btn-primary" type="submit">Consultar</button>
+</form>
+
+<div *ngIf="resultado" class="mt-3">
+  <h5>Mejores opciones de cultivo</h5>
+  <div *ngFor="let rec of resultado.mejores" class="mb-3 p-2 border rounded">
+    <strong>{{ rec.producto }}</strong>
+    <div>Score: {{ rec.score }}</div>
+    <div>Promedio precio: {{ rec.promedio | number:'1.0-2' }}</div>
+    <div>Tendencia: {{ rec.tendencia | number:'1.0-2' }}</div>
+    <div>Tiempo de cosecha: {{ rec.tiempo_cosecha }} días</div>
+    <div *ngIf="rec.faltan.length">Faltan datos: {{ rec.faltan.join(', ') }}</div>
+    <div *ngIf="rec.observaciones">Observaciones: {{ rec.observaciones }}</div>
+  </div>
+</div>
+<div class="mt-2 text-danger">{{ mensaje }}</div>
