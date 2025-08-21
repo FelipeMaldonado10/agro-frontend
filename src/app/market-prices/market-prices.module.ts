@@ -5,8 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MarketPricesComponent } from './market-prices.component';
 
 @NgModule({
-  declarations: [MarketPricesComponent],
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
-  exports: [MarketPricesComponent]
+
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, MarketPricesComponent],
+
 })
 export class MarketPricesModule {}
