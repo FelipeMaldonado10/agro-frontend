@@ -21,10 +21,12 @@
         <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/user-management" routerLinkActive="active">Gestión de Usuarios</a>
         </li>
-
         <li class="nav-item" *ngIf="isLoggedIn && isAdmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/ciudades" routerLinkActive="active">Gestión de Ciudades</a>
-
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin" (click)="closeNavbar()">
+          <a class="nav-link" routerLink="/productos" routerLinkActive="active">Catálogo de Productos</a>
+        </li>
         <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/productos/nuevo" routerLinkActive="active">Registrar Producto</a>
         </li>
@@ -34,14 +36,13 @@
         <li class="nav-item" *ngIf="isLoggedIn" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/recomendaciones" routerLinkActive="active">Recomendaciones</a>
         </li>
-
         <li class="nav-item" *ngIf="isLoggedIn" (click)="closeNavbar()">
           <a class="nav-link" (click)="logout()">Cerrar sesión</a>
         </li>
-        <span class="navbar-text ms-3" *ngIf="isLoggedIn">
+      </ul>
+      <span class="navbar-text ms-3" *ngIf="isLoggedIn">
         {{ user?.nombre }} ({{ user?.rol }})
-        </span>
-        </ul>
+      </span>
     </div>
   </div>
 </nav>
