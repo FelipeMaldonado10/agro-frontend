@@ -14,7 +14,21 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
+    path: 'ciudades/crear',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'ciudades/editar/:id',
+    renderMode: RenderMode.Client
+  },
+  {
     path: '**',
     renderMode: RenderMode.Prerender
   }
+
+
+
+
+
+
 ];
