@@ -13,6 +13,7 @@ export class NavbarComponent {
   user: any;
   isLoggedIn = false;
   isSuperadmin = false;
+  isProductor = false;
   menuOpen = false;
 
   constructor(private auth: AuthService, private router: Router) {
@@ -29,6 +30,7 @@ export class NavbarComponent {
     this.user = this.auth.getUserInfo();
     this.isLoggedIn = !!this.user;
     this.isSuperadmin = this.user?.rol === 'superadmin';
+    this.isProductor = this.user && ['productor', 'admin', 'superadmin'].includes(this.user.rol);
   }
 
   toggleMenu() {
