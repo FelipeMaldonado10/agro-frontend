@@ -1,0 +1,40 @@
+<form [formGroup]="form" (ngSubmit)="guardar()" class="p-3 border rounded bg-light">
+  <h4>Registrar producto</h4>
+  <div class="mb-2">
+    <label>Nombre</label>
+    <input formControlName="nombre" class="form-control" />
+  </div>
+  <div class="mb-2">
+    <label>Humedad óptima (%)</label>
+    <input formControlName="humedad_optima" type="number" class="form-control" />
+  </div>
+  <div class="mb-2">
+    <label>Temperatura óptima (°C)</label>
+    <input formControlName="temperatura_optima" type="number" class="form-control" />
+  </div>
+  <div class="mb-2">
+    <label>Temporada</label>
+    <input formControlName="temporada" class="form-control" />
+  </div>
+  <div class="mb-2">
+    <label>Tiempo de cosecha (días)</label>
+    <input formControlName="tiempo_cosecha" type="number" class="form-control" />
+  </div>
+  <fieldset formGroupName="caracteristicas" class="mb-2">
+    <legend>Características</legend>
+    <label>Lluvia</label>
+    <input formControlName="sensibilidad_lluvia" class="form-control mb-1" />
+    <label>Temperatura</label>
+    <input formControlName="sensibilidad_temperatura" class="form-control mb-1" />
+    <label>Humedad</label>
+    <input formControlName="sensibilidad_humedad" class="form-control mb-1" />
+    <label>Otros</label>
+    <input formControlName="otros" class="form-control mb-1" />
+  </fieldset>
+  <div class="mb-2">
+    <label>Observaciones</label>
+    <textarea formControlName="observaciones" class="form-control"></textarea>
+  </div>
+  <button class="btn btn-success" type="submit">Guardar</button>
+  <div class="mt-2 text-success">{{ mensaje }}</div>
+</form>

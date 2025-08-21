@@ -1,0 +1,79 @@
+.market-prices-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: #e8f5e9;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 24px rgba(67,160,71,0.12);
+}
+.price-form {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.price-form input {
+  padding: 0.6rem;
+  border-radius: 0.7rem;
+  border: 1px solid #66bb6a;
+  background: #fff;
+  font-size: 1rem;
+}
+.price-form button {
+  background: #43a047;
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.price-form button:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+.file-upload {
+  margin-bottom: 1.5rem;
+}
+.file-upload label {
+  font-weight: bold;
+  margin-right: 1rem;
+}
+.file-upload input[type="file"] {
+  margin-right: 1rem;
+}
+.error {
+  color: #d32f2f;
+  margin-left: 1rem;
+}
+.prices-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+.prices-table th, .prices-table td {
+  padding: 0.7rem;
+  border-bottom: 1px solid #c8e6c9;
+  text-align: left;
+}
+.prices-table th {
+  background: #43a047;
+  color: #fff;
+}
+.prices-table tr:last-child td {
+  border-bottom: none;
+}
+.prices-table button {
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+.prices-table button:hover {
+  background: #b71c1c;
+}

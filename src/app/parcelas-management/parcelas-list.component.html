@@ -1,0 +1,17 @@
+<div class="container mt-3">
+  <h4>Mis parcelas</h4>
+  <div *ngIf="mensaje" class="text-danger">{{ mensaje }}</div>
+  <div *ngFor="let parcela of parcelas" class="card mb-2">
+    <div class="card-body">
+      <h5>{{ parcela.nombre }}</h5>
+      <div>Ciudad: {{ parcela.ciudad }}</div>
+      <div>Latitud: {{ parcela.coordenadas.latitud }}, Longitud: {{ parcela.coordenadas.longitud }}</div>
+      <div *ngIf="parcela.datosClimaticos">
+        <strong>Clima actual:</strong>
+        <div>Temperatura: {{ parcela.datosClimaticos.temperatura }}°C</div>
+        <div>Humedad: {{ parcela.datosClimaticos.humedad_relativa }}%</div>
+        <div>Lluvia: {{ parcela.datosClimaticos.lluvia }} mm</div>
+      </div>
+    </div>
+  </div>
+</div>
