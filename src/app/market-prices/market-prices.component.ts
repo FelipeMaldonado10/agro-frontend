@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-market-prices',
   templateUrl: './market-prices.component.html',
-  styleUrls: ['./market-prices.component.css'],
+  // styleUrls: ['./market-prices.component.css'],
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule]
 })
