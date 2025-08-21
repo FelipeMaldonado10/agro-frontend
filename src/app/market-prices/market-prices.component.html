@@ -1,0 +1,40 @@
+<div class="market-prices-container">
+  <h2>Gestión de Precios Históricos</h2>
+  <form [formGroup]="form" (ngSubmit)="submitForm()" class="price-form">
+    <input formControlName="producto" placeholder="Producto" required>
+    <input formControlName="fecha" type="date" placeholder="Fecha" required>
+    <input formControlName="precio" type="number" placeholder="Precio" required>
+    <input formControlName="mercado" placeholder="Mercado">
+    <input formControlName="departamento" placeholder="Departamento">
+    <button type="submit" [disabled]="form.invalid">Agregar manualmente</button>
+  </form>
+  <div class="file-upload">
+    <label for="file">Subir archivo Excel/CSV:</label>
+    <input id="file" type="file" (change)="onFileChange($event)" accept=".xlsx,.xls,.csv">
+    <span *ngIf="uploading">Subiendo archivo...</span>
+    <span class="error" *ngIf="fileError">{{ fileError }}</span>
+  </div>
+  <h3>Registros actuales</h3>
+  <table class="prices-table">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Fecha</th>
+        <th>Precio</th>
+        <th>Mercado</th>
+        <th>Departamento</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of prices">
+        <td>{{ p.producto }}</td>
+        <td>{{ p.fecha }}</td>
+        <td>{{ p.precio }}</td>
+        <td>{{ p.mercado }}</td>
+        <td>{{ p.departamento }}</td>
+        <td><button (click)="deletePrice(p._id)">Eliminar</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
