@@ -13,6 +13,7 @@ export class NavbarComponent {
   user: any;
   isLoggedIn = false;
   isSuperadmin = false;
+  isAdmin = false;
   isProductor = false;
   menuOpen = false;
 
@@ -30,6 +31,7 @@ export class NavbarComponent {
     this.user = this.auth.getUserInfo();
     this.isLoggedIn = !!this.user;
     this.isSuperadmin = this.user?.rol === 'superadmin';
+    this.isAdmin = this.user && ['admin', 'superadmin'].includes(this.user.rol);
     this.isProductor = this.user && ['productor', 'admin', 'superadmin'].includes(this.user.rol);
   }
 

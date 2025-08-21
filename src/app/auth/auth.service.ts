@@ -34,4 +34,9 @@ export class AuthService {
       window.localStorage.removeItem('token');
     }
   }
+
+  isAdmin(): boolean {
+    const user = this.getUserInfo();
+    return user && ['admin', 'superadmin'].includes(user.rol);
+  }
 }

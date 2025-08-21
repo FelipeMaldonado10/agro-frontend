@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ParcelaService } from '../parcela.service';
@@ -12,7 +13,10 @@ import { ParcelaService } from '../parcela.service';
       <div class="row">
         <div class="col-md-8">
           <h2>{{ parcela.nombre }}</h2>
-          <h5 class="text-muted">{{ parcela.ciudad }}</h5>
+
+
+          <h5 class="text-muted">{{parcela.ciudad.nombre}}</h5>
+
 
           <div class="card mt-4">
             <div class="card-body">
@@ -23,32 +27,25 @@ import { ParcelaService } from '../parcela.service';
                 <div class="col-md-6">
                   <h5>Datos Atmosféricos</h5>
                   <ul class="list-unstyled">
-                    <li><strong>Temperatura:</strong> {{ parcela.datosClimaticos.temperatura | number:'1.0-3' }}°C</li>
-                    <li><strong>Humedad Relativa:</strong> {{ parcela.datosClimaticos.humedad_relativa | number:'1.0-3' }}%</li>
-                    <li><strong>Temperatura Aparente:</strong> {{ parcela.datosClimaticos.temperatura_aparente | number:'1.0-3' }}°C</li>
-                    <li><strong>Lluvia:</strong> {{ parcela.datosClimaticos.lluvia | number:'1.0-3' }} mm</li>
-                    <li><strong>Precipitación:</strong> {{ parcela.datosClimaticos.precipitacion | number:'1.0-3' }} mm</li>
+                    <li><strong>Temperatura:</strong> {{ parcela.datosClimaticos.temperatura | number:'1.0-1' }}°C</li>
+                    <li><strong>Humedad Relativa:</strong> {{ parcela.datosClimaticos.humedad_relativa | number:'1.0-1' }}%</li>
+                    <li><strong>Velocidad del Viento:</strong> {{ parcela.datosClimaticos.velocidad_viento_180m | number:'1.0-1' }} m/s</li>
+                    <li><strong>Temperatura Aparente:</strong> {{ parcela.datosClimaticos.temperatura_aparente | number:'1.0-1' }}°C</li>
                   </ul>
                 </div>
                 
                 <div class="col-md-6">
                   <h5>Datos del Suelo</h5>
                   <ul class="list-unstyled">
-                    <li><strong>Humedad Suelo (0-1cm):</strong> {{ parcela.datosClimaticos.humedad_suelo_0_1cm | number:'1.0-3' }}%</li>
-                    <li><strong>Humedad Suelo (1-3cm):</strong> {{ parcela.datosClimaticos.humedad_suelo_1_3cm | number:'1.0-3' }}%</li>
-                    <li><strong>Temperatura Suelo (0cm):</strong> {{ parcela.datosClimaticos.temperatura_suelo_0cm | number:'1.0-3' }}°C</li>
-                    <li><strong>Temperatura Suelo (6cm):</strong> {{ parcela.datosClimaticos.temperatura_suelo_6cm | number:'1.0-3' }}°C</li>
+                    <li><strong>Humedad Suelo (0-1cm):</strong> {{ parcela.datosClimaticos.humedad_suelo_0_1cm | number:'1.0-1' }}%</li>
+                    <li><strong>Humedad Suelo (1-3cm):</strong> {{ parcela.datosClimaticos.humedad_suelo_1_3cm | number:'1.0-1' }}%</li>
+                    <li><strong>Temperatura Suelo (0cm):</strong> {{ parcela.datosClimaticos.temperatura_suelo_0cm | number:'1.0-1' }}°C</li>
+                    <li><strong>Temperatura Suelo (6cm):</strong> {{ parcela.datosClimaticos.temperatura_suelo_6cm | number:'1.0-1' }}°C</li>
                   </ul>
                 </div>
               </div>
 
-              <div class="mt-3">
-                <h5>Datos Adicionales</h5>
-                <ul class="list-unstyled">
-                  <li><strong>Temperatura a 80m:</strong> {{ parcela.datosClimaticos.temperatura_80m | number:'1.0-3' }}°C</li>
-                  <li><strong>Velocidad del Viento a 180m:</strong> {{ parcela.datosClimaticos.velocidad_viento_180m | number:'1.0-3' }} m/s</li>
-                </ul>
-              </div>
+
             </div>
           </div>
 
@@ -57,8 +54,8 @@ import { ParcelaService } from '../parcela.service';
               <h4 class="card-title">Ubicación</h4>
               <p><strong>Coordenadas:</strong></p>
               <ul>
-                <li>Latitud: {{ parcela.coordenadas.latitud }}</li>
-                <li>Longitud: {{ parcela.coordenadas.longitud }}</li>
+                <li>Latitud: {{ parcela.ciudad.coordenadas.latitud }}</li>
+                <li>Longitud: {{ parcela.ciudad.coordenadas.longitud }}</li>
               </ul>
             </div>
           </div>
@@ -87,7 +84,10 @@ import { ParcelaService } from '../parcela.service';
     }
   `]
 })
-export class ParcelaDetailComponent implements OnInit {
+export class ParcelaDetailComponent implements OnInit, OnDestroy {
+  private parcelaSubscription: Subscription | null = null;
+  private actualizacionAutomatica: any;
+  private readonly INTERVALO_ACTUALIZACION = 300000; // 5 minutos en milisegundos
   parcela: any = null;
   actualizacionEnCurso = false;
   tiempoRestante = 0;
@@ -99,6 +99,7 @@ export class ParcelaDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.iniciarActualizacionAutomatica();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.cargarParcela(id);
@@ -107,8 +108,25 @@ export class ParcelaDetailComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    if (this.actualizacionAutomatica) {
+      clearInterval(this.actualizacionAutomatica);
+    }
+    if (this.parcelaSubscription) {
+      this.parcelaSubscription.unsubscribe();
+    }
+  }
+
+  iniciarActualizacionAutomatica() {
+    this.actualizacionAutomatica = setInterval(() => {
+      if (this.parcela?._id && !this.actualizacionEnCurso) {
+        this.actualizarClima();
+      }
+    }, this.INTERVALO_ACTUALIZACION);
+  }
+
   cargarParcela(id: string) {
-    this.parcelaService.obtenerParcela(id).subscribe({
+    this.parcelaSubscription = this.parcelaService.obtenerParcela(id).subscribe({
       next: (data) => {
         this.parcela = data;
       },
