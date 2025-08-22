@@ -1,5 +1,6 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
+
 export const serverRoutes: ServerRoute[] = [
   {
     path: 'user-management/edit/:id',
@@ -14,7 +15,15 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
+    path: 'ciudades/crear',
+    renderMode: RenderMode.Client
+  },
+  {
+    path: 'ciudades/editar/:id',
+    renderMode: RenderMode.Client
+  },
+  {
     path: '**',
-    renderMode: RenderMode.Prerender
+    renderMode: RenderMode.Client
   }
 ];

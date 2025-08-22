@@ -1,0 +1,105 @@
+<div class="form-container">
+  <h2 class="mb-4">Editar Producto</h2>
+
+  <div *ngIf="cargando" class="loading-spinner">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <form *ngIf="!cargando" [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="form-section">
+      <h4>Información General</h4>
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre del Producto</label>
+        <input type="text" class="form-control" id="nombre" formControlName="nombre">
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="humedad" class="form-label">Humedad Óptima (%)</label>
+          <input type="number" class="form-control" id="humedad" formControlName="humedad_optima">
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="temperatura" class="form-label">Temperatura Óptima (°C)</label>
+          <input type="number" class="form-control" id="temperatura" formControlName="temperatura_optima">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="temporada" class="form-label">Temporada</label>
+          <input type="text" class="form-control" id="temporada" formControlName="temporada">
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="tiempo_cosecha" class="form-label">Tiempo de Cosecha (días)</label>
+          <input type="number" class="form-control" id="tiempo_cosecha" formControlName="tiempo_cosecha">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section" formGroupName="caracteristicas">
+      <h4>Características de Sensibilidad</h4>
+      
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="sens_lluvia" class="form-label">Sensibilidad a la Lluvia</label>
+          <select class="form-select" id="sens_lluvia" formControlName="sensibilidad_lluvia">
+            <option value="">Seleccionar...</option>
+            <option value="baja">Baja</option>
+            <option value="media">Media</option>
+            <option value="alta">Alta</option>
+          </select>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="sens_temp" class="form-label">Sensibilidad a la Temperatura</label>
+          <select class="form-select" id="sens_temp" formControlName="sensibilidad_temperatura">
+            <option value="">Seleccionar...</option>
+            <option value="baja">Baja</option>
+            <option value="media">Media</option>
+            <option value="alta">Alta</option>
+          </select>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="sens_humedad" class="form-label">Sensibilidad a la Humedad</label>
+          <select class="form-select" id="sens_humedad" formControlName="sensibilidad_humedad">
+            <option value="">Seleccionar...</option>
+            <option value="baja">Baja</option>
+            <option value="media">Media</option>
+            <option value="alta">Alta</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="otros" class="form-label">Otros Detalles</label>
+        <textarea class="form-control" id="otros" formControlName="otros" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h4>Observaciones Adicionales</h4>
+      <div class="mb-3">
+        <label for="observaciones" class="form-label">Observaciones</label>
+        <textarea class="form-control" id="observaciones" formControlName="observaciones" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary" [disabled]="!form.valid || guardando">
+        {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+
+    <div *ngIf="mensaje" class="alert" [ngClass]="{'alert-success': !error, 'alert-danger': error}">
+      {{ mensaje }}
+    </div>
+  </form>
+</div>

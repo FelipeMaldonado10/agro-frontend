@@ -1,0 +1,63 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Catálogo de Productos</h2>
+    <button class="btn btn-primary" routerLink="/productos/nuevo">
+      <i class="fas fa-plus"></i> Nuevo Producto
+    </button>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col" *ngFor="let producto of productos">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h5 class="card-title">{{producto.nombre}}</h5>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-primary" (click)="editarProducto(producto._id)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="eliminarProducto(producto._id)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-text">
+            <div class="info-section">
+              <h6 class="section-title">Información General</h6>
+              <p><i class="fas fa-calendar"></i> <strong>Temporada:</strong> {{producto.temporada}}</p>
+              <p><i class="fas fa-clock"></i> <strong>Tiempo de cosecha:</strong> {{producto.tiempo_cosecha}} días</p>
+            </div>
+
+            <div class="info-section">
+              <h6 class="section-title">Condiciones Óptimas</h6>
+              <ul class="list-unstyled">
+                <li><i class="fas fa-thermometer-half"></i> Temperatura: {{producto.temperatura_optima}}°C</li>
+                <li><i class="fas fa-tint"></i> Humedad: {{producto.humedad_optima}}%</li>
+              </ul>
+            </div>
+
+            <div class="info-section">
+              <h6 class="section-title">Sensibilidad</h6>
+              <ul class="list-unstyled">
+                <li><i class="fas fa-cloud-rain"></i> Lluvia: {{producto.caracteristicas.sensibilidad_lluvia || 'No especificada'}}</li>
+                <li><i class="fas fa-temperature-high"></i> Temperatura: {{producto.caracteristicas.sensibilidad_temperatura || 'No especificada'}}</li>
+                <li><i class="fas fa-water"></i> Humedad: {{producto.caracteristicas.sensibilidad_humedad || 'No especificada'}}</li>
+              </ul>
+            </div>
+
+            <div class="info-section" *ngIf="producto.caracteristicas.otros">
+              <h6 class="section-title">Otros Detalles</h6>
+              <p>{{producto.caracteristicas.otros}}</p>
+            </div>
+
+            <div class="info-section" *ngIf="producto.observaciones">
+              <h6 class="section-title">Observaciones</h6>
+              <p>{{producto.observaciones}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

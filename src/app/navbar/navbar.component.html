@@ -9,17 +9,23 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/" routerLinkActive="active" (click)="closeNavbar()">Inicio</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn && isProductor" (click)="closeNavbar()">
+        <li class="nav-item" *ngIf="isLoggedIn && !isAdmin && !isSuperadmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/parcelas" routerLinkActive="active">Mis Parcelas</a>
         </li>
-        <li class="nav-item" *ngIf="!isLoggedIn" (click)="closeNavbar()">
+        <li class="nav-item" *ngIf="!isLoggedIn && !isSuperadmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/register" routerLinkActive="active">Registro</a>
         </li>
-        <li class="nav-item" *ngIf="!isLoggedIn" (click)="closeNavbar()">
+        <li class="nav-item" *ngIf="!isLoggedIn && !isSuperadmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/user-management" routerLinkActive="active">Gestión de Usuarios</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && isAdmin" (click)="closeNavbar()">
+          <a class="nav-link" routerLink="/ciudades" routerLinkActive="active">Gestión de Ciudades</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin" (click)="closeNavbar()">
+          <a class="nav-link" routerLink="/productos" routerLinkActive="active">Catálogo de Productos</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/productos/nuevo" routerLinkActive="active">Registrar Producto</a>

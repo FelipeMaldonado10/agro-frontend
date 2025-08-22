@@ -1,16 +1,19 @@
-<<<<<<< Updated upstream
+
 import { Component } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-=======
+
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ParcelaService } from '../parcelas/parcela.service';
 import { environment } from '../../environments/environment';
->>>>>>> Stashed changes
+
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-recomendaciones-form',

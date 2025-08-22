@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ParcelaService } from '../parcela.service';
@@ -18,27 +19,34 @@ import { ParcelaService } from '../parcela.service';
         <div class="col-md-4 mb-4" *ngFor="let parcela of parcelas">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">{{ parcela.nombre }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{ parcela.ciudad }}</h6>
+              <h4 class="card-title">{{ parcela.nombre }}</h4>
+
+
+
+              <h6 class="card-subtitle mb-2 text-muted">{{ parcela.ciudad.nombre }}</h6>
               
+
+
               <div class="mt-3">
                 <h6>Datos Climáticos Actuales:</h6>
                 <ul class="list-unstyled">
-                  <li>Temperatura: {{ parcela.datosClimaticos.temperatura }}°C</li>
-                  <li>Humedad: {{ parcela.datosClimaticos.humedad_relativa }}%</li>
-                  <li>Lluvia: {{ parcela.datosClimaticos.lluvia }} mm</li>
+                  <li>Temperatura: {{ parcela.datosClimaticos.temperatura | number:'1.0-1' }}°C</li>
+                  <li>Humedad: {{ parcela.datosClimaticos.humedad_relativa | number:'1.0-1' }}%</li>
+                  <li>Velocidad del viento: {{ parcela.datosClimaticos.velocidad_viento_180m | number:'1.0-1' }} m/s</li>
                 </ul>
               </div>
 
               <div class="mt-3">
                 <button class="btn btn-sm btn-info me-2" 
-                        (click)="actualizarClima(parcela._id)">
-                  Actualizar Clima
+                        (click)="actualizarClima(parcela._id)"
+                        [disabled]="actualizacionesEnCurso[parcela._id]">
+                  {{ obtenerTextoBotonActualizar(parcela._id) }}
                 </button>
                 <button class="btn btn-sm btn-primary me-2" 
                         [routerLink]="['/parcelas', parcela._id]">
                   Ver Detalles
                 </button>
+                <br>
                 <button class="btn btn-sm btn-danger" 
                         (click)="eliminarParcela(parcela._id)">
                   Eliminar
@@ -60,7 +68,10 @@ import { ParcelaService } from '../parcela.service';
     }
   `]
 })
-export class ParcelaListComponent implements OnInit {
+export class ParcelaListComponent implements OnInit, OnDestroy {
+  private parcelasSubscription: Subscription | null = null;
+  actualizacionesEnCurso: { [key: string]: boolean } = {};
+  tiemposRestantes: { [key: string]: number } = {};
   parcelas: any[] = [];
 
   constructor(private parcelaService: ParcelaService) {}
@@ -69,8 +80,14 @@ export class ParcelaListComponent implements OnInit {
     this.cargarParcelas();
   }
 
+  ngOnDestroy() {
+    if (this.parcelasSubscription) {
+      this.parcelasSubscription.unsubscribe();
+    }
+  }
+
   cargarParcelas() {
-    this.parcelaService.obtenerParcelas().subscribe({
+    this.parcelasSubscription = this.parcelaService.parcelas$.subscribe({
       next: (data) => {
         this.parcelas = data;
       },
@@ -81,17 +98,42 @@ export class ParcelaListComponent implements OnInit {
   }
 
   actualizarClima(id: string) {
+    if (this.actualizacionesEnCurso[id]) {
+      return;
+    }
+
+    this.actualizacionesEnCurso[id] = true;
+    this.tiemposRestantes[id] = 30;
     this.parcelaService.actualizarDatosClimaticos(id).subscribe({
       next: (data) => {
         const index = this.parcelas.findIndex(p => p._id === id);
         if (index !== -1) {
           this.parcelas[index] = data;
+          this.iniciarTemporizador(id);
         }
       },
       error: (error) => {
         console.error('Error al actualizar clima:', error);
+        this.actualizacionesEnCurso[id] = false;
       }
     });
+  }
+
+  iniciarTemporizador(id: string) {
+    const intervalo = setInterval(() => {
+      if (this.tiemposRestantes[id] > 0) {
+        this.tiemposRestantes[id]--;
+      } else {
+        clearInterval(intervalo);
+        this.actualizacionesEnCurso[id] = false;
+      }
+    }, 1000);
+  }
+
+  obtenerTextoBotonActualizar(id: string): string {
+    return this.actualizacionesEnCurso[id] 
+      ? `Espere ${this.tiemposRestantes[id]} segundos` 
+      : 'Actualizar Clima';
   }
 
   eliminarParcela(id: string) {
