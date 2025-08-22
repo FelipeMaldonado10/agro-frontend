@@ -22,12 +22,35 @@
   </div>
   <fieldset formGroupName="caracteristicas" class="mb-2">
     <legend>Características</legend>
-    <label>Lluvia</label>
-    <input formControlName="sensibilidad_lluvia" class="form-control mb-1" />
-    <label>Temperatura</label>
-    <input formControlName="sensibilidad_temperatura" class="form-control mb-1" />
-    <label>Humedad</label>
-    <input formControlName="sensibilidad_humedad" class="form-control mb-1" />
+    <div class="mb-3">
+      <label for="sens_lluvia" class="form-label">Sensibilidad a la Lluvia</label>
+      <select class="form-select" id="sens_lluvia" formControlName="sensibilidad_lluvia">
+        <option value="">Seleccionar...</option>
+        <option value="baja">Baja</option>
+        <option value="media">Media</option>
+        <option value="alta">Alta</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="sens_temp" class="form-label">Sensibilidad a la Temperatura</label>
+      <select class="form-select" id="sens_temp" formControlName="sensibilidad_temperatura">
+        <option value="">Seleccionar...</option>
+        <option value="baja">Baja</option>
+        <option value="media">Media</option>
+        <option value="alta">Alta</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="sens_humedad" class="form-label">Sensibilidad a la Humedad</label>
+      <select class="form-select" id="sens_humedad" formControlName="sensibilidad_humedad">
+        <option value="">Seleccionar...</option>
+        <option value="baja">Baja</option>
+        <option value="media">Media</option>
+        <option value="alta">Alta</option>
+      </select>
+    </div>
     <label>Otros</label>
     <input formControlName="otros" class="form-control mb-1" />
   </fieldset>
