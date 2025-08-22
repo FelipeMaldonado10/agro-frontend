@@ -41,18 +41,33 @@ import { ProductoService } from './producto.service';
           <h4 class="mt-4 mb-3">Características</h4>
           
           <div class="mb-3">
-            <label class="form-label">Sensibilidad a la Lluvia</label>
-            <input type="text" class="form-control" formControlName="sensibilidad_lluvia">
+            <label for="sens_lluvia" class="form-label">Sensibilidad a la Lluvia</label>
+            <select class="form-select" id="sens_lluvia" formControlName="sensibilidad_lluvia">
+              <option value="">Seleccionar...</option>
+              <option value="baja">Baja</option>
+              <option value="media">Media</option>
+              <option value="alta">Alta</option>
+            </select>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Sensibilidad a la Temperatura</label>
-            <input type="text" class="form-control" formControlName="sensibilidad_temperatura">
+            <label for="sens_temp" class="form-label">Sensibilidad a la Temperatura</label>
+            <select class="form-select" id="sens_temp" formControlName="sensibilidad_temperatura">
+              <option value="">Seleccionar...</option>
+              <option value="baja">Baja</option>
+              <option value="media">Media</option>
+              <option value="alta">Alta</option>
+            </select>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Sensibilidad a la Humedad</label>
-            <input type="text" class="form-control" formControlName="sensibilidad_humedad">
+            <label for="sens_humedad" class="form-label">Sensibilidad a la Humedad</label>
+            <select class="form-select" id="sens_humedad" formControlName="sensibilidad_humedad">
+              <option value="">Seleccionar...</option>
+              <option value="baja">Baja</option>
+              <option value="media">Media</option>
+              <option value="alta">Alta</option>
+            </select>
           </div>
 
           <div class="mb-3">
