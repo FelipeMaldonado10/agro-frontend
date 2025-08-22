@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <form [formGroup]="form" (ngSubmit)="consultar()" class="p-3 border rounded bg-light mb-3">
   <h4>Consultar recomendaciones</h4>
   <div class="mb-2">
@@ -10,17 +11,167 @@
   </div>
   <button class="btn btn-primary" type="submit">Consultar</button>
 </form>
+=======
+<div class="container-fluid p-3">
+  <div class="card">
+    <div class="card-header">
+      <h4><i class="fas fa-seedling"></i> Recomendaciones de Cultivo</h4>
+    </div>
+    <div class="card-body">
+      <div *ngIf="parcelas.length === 0" class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        No tienes parcelas registradas. <a routerLink="/parcelas" class="btn btn-sm btn-primary ms-2">Registrar Parcela</a>
+      </div>
 
-<div *ngIf="resultado" class="mt-3">
-  <h5>Mejores opciones de cultivo</h5>
-  <div *ngFor="let rec of resultado.mejores" class="mb-3 p-2 border rounded">
-    <strong>{{ rec.producto }}</strong>
-    <div>Score: {{ rec.score }}</div>
-    <div>Promedio precio: {{ rec.promedio | number:'1.0-2' }}</div>
-    <div>Tendencia: {{ rec.tendencia | number:'1.0-2' }}</div>
-    <div>Tiempo de cosecha: {{ rec.tiempo_cosecha }} días</div>
-    <div *ngIf="rec.faltan.length">Faltan datos: {{ rec.faltan.join(', ') }}</div>
-    <div *ngIf="rec.observaciones">Observaciones: {{ rec.observaciones }}</div>
+      <div *ngIf="parcelas.length > 0">
+        <form [formGroup]="form" class="mb-4">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form-label">Fecha planeada de siembra:</label>
+              <input formControlName="fechaSiembra" type="date" class="form-control" />
+              <small class="form-text text-muted">Esta fecha se usa para evaluar la temporada y precios esperados</small>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Parcela específica (opcional):</label>
+              <select formControlName="parcela" class="form-control">
+                <option value="">Todas las parcelas</option>
+                <option *ngFor="let parcela of parcelas" [value]="parcela._id">
+                  {{ parcela.nombre }} - {{ parcela.ciudad?.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <button class="btn btn-success me-2" type="button" (click)="consultarTodas()" [disabled]="cargando">
+              <i class="fas fa-chart-line" *ngIf="!cargando"></i>
+              <i class="fas fa-spinner fa-spin" *ngIf="cargando"></i>
+              {{ cargando ? 'Consultando...' : 'Obtener Recomendaciones' }}
+            </button>
+            
+            <button class="btn btn-primary" type="button" (click)="consultarParcela()" 
+                    [disabled]="!form.get('parcela')?.value || cargando">
+              <i class="fas fa-map-marker-alt"></i>
+              Consultar Parcela Específica
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resultados -->
+  <div *ngIf="resultado" class="mt-4">
+    <div class="alert alert-success">
+      <strong><i class="fas fa-check-circle"></i> Recomendaciones generadas exitosamente</strong><br>
+      <small>Fecha: {{ formatearFecha(resultado.fecha_siembra) }} | 
+             Parcelas evaluadas: {{ resultado.total_parcelas }}</small>
+    </div>
+    
+    <div *ngFor="let recomendacion of resultado.recomendaciones" class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+          <i class="fas fa-map-marker-alt"></i> 
+          {{ recomendacion.parcela.nombre }} - {{ recomendacion.parcela.ciudad }}
+        </h5>
+        <small>
+          Coordenadas: {{ recomendacion.parcela.coordenadas?.latitud }}, {{ recomendacion.parcela.coordenadas?.longitud }}
+        </small>
+      </div>
+      
+      <div class="card-body">
+        <!-- Estado de datos -->
+        <div *ngIf="recomendacion.estado_datos" class="row mb-3">
+          <div class="col-md-12">
+            <div class="alert alert-info">
+              <strong>Estado de la información:</strong><br>
+              • Productos evaluados: {{ recomendacion.estado_datos.total_productos_evaluados }}<br>
+              • Con precios históricos: {{ recomendacion.estado_datos.productos_con_precios }}<br>
+              • Sin precios: {{ recomendacion.estado_datos.productos_sin_precios }}<br>
+              • Datos climáticos: {{ recomendacion.estado_datos.datos_climaticos_disponibles ? 'Disponibles' : 'No disponibles' }}
+            </div>
+          </div>
+        </div>
+>>>>>>> Stashed changes
+
+        <!-- Alertas generales -->
+        <div *ngIf="recomendacion.alertas_generales?.length" class="alert alert-warning">
+          <strong>⚠️ Consideraciones importantes:</strong>
+          <ul class="mb-0 mt-1">
+            <li *ngFor="let alerta of recomendacion.alertas_generales">{{ alerta }}</li>
+          </ul>
+        </div>
+
+        <!-- Mejores opciones -->
+        <h6 class="text-success">🌱 Top 3 Recomendaciones:</h6>
+        <div class="row">
+          <div *ngFor="let opcion of recomendacion.mejores_opciones; index as i" class="col-md-4 mb-3">
+            <div class="card h-100" [class]="i === 0 ? 'border-success' : (i === 1 ? 'border-warning' : 'border-info')">
+              <div class="card-header" [class]="i === 0 ? 'bg-success text-white' : (i === 1 ? 'bg-warning text-dark' : 'bg-info text-white')">
+                <h6 class="mb-0">
+                  {{ i === 0 ? '🥇' : (i === 1 ? '🥈' : '🥉') }} {{ opcion.producto }}
+                  <span class="badge bg-light text-dark float-end">{{ opcion.score }} pts</span>
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="mb-2">
+                  <strong>💰 Precio promedio:</strong> ${{ opcion.promedio_precio | number:'1.0-0' }}
+                </div>
+                <div class="mb-2">
+                  <strong>📈 Tendencia:</strong> 
+                  <span [class]="opcion.tendencia_precio > 0 ? 'text-success' : (opcion.tendencia_precio < 0 ? 'text-danger' : 'text-muted')">
+                    {{ opcion.tendencia_precio > 0 ? '↗️ +' : (opcion.tendencia_precio < 0 ? '↘️ ' : '➡️ ') }}${{ Math.abs(opcion.tendencia_precio) | number:'1.0-0' }}
+                  </span>
+                </div>
+                <div class="mb-2">
+                  <strong>⏱️ Cosecha:</strong> {{ opcion.tiempo_cosecha }} días
+                </div>
+                <div class="mb-2">
+                  <strong>📅 Fecha estimada:</strong> {{ formatearFecha(opcion.fecha_estimada_cosecha) }}
+                </div>
+                <div class="mb-2">
+                  <strong>🌤️ Temporada:</strong> {{ opcion.temporada || 'Todo el año' }}
+                </div>
+
+                <!-- Datos climáticos -->
+                <div *ngIf="opcion.datos_climaticos" class="mt-2 small">
+                  <strong>🌡️ Condiciones climáticas:</strong><br>
+                  • Temperatura: {{ opcion.datos_climaticos.temperatura_actual }}°C 
+                  (óptimo: {{ opcion.datos_climaticos.temperatura_optima }}°C)<br>
+                  • Humedad: {{ opcion.datos_climaticos.humedad_actual }}% 
+                  (óptimo: {{ opcion.datos_climaticos.humedad_optima }}%)
+                </div>
+
+                <!-- Evaluación detallada -->
+                <div *ngIf="opcion.detalles_evaluacion?.length" class="mt-2">
+                  <strong class="text-success">✅ Factores favorables:</strong>
+                  <ul class="small mb-1">
+                    <li *ngFor="let detalle of opcion.detalles_evaluacion" class="text-success">{{ detalle }}</li>
+                  </ul>
+                </div>
+
+                <!-- Alertas específicas -->
+                <div *ngIf="opcion.alertas?.length" class="mt-2">
+                  <strong class="text-warning">⚠️ Consideraciones:</strong>
+                  <ul class="small mb-1">
+                    <li *ngFor="let alerta of opcion.alertas" class="text-warning">{{ alerta }}</li>
+                  </ul>
+                </div>
+
+                <!-- Observaciones -->
+                <div *ngIf="opcion.observaciones" class="mt-2 small text-muted">
+                  <strong>💡 Observaciones:</strong> {{ opcion.observaciones }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="mensaje" class="alert alert-danger mt-3">
+    <i class="fas fa-exclamation-circle"></i> {{ mensaje }}
   </div>
 </div>
-<div class="mt-2 text-danger">{{ mensaje }}</div>
