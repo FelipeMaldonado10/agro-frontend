@@ -1,12 +1,58 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <form [formGroup]="form" (ngSubmit)="consultar()" class="p-3 border rounded bg-light mb-3">
   <h4>Consultar recomendaciones</h4>
+=======
+<div class="container-fluid p-3">
+  <div class="card">
+    <div class="card-header">
+      <h4><i class="fas fa-seedling"></i> Recomendaciones de Cultivo</h4>
+    </div>
+    <div class="card-body">
+      <div *ngIf="parcelas.length === 0" class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        No tienes parcelas registradas. <a routerLink="/parcelas" class="btn btn-sm btn-primary ms-2">Registrar Parcela</a>
+      </div>
+>>>>>>> Stashed changes
 
-  <div class="mb-2">
-    <label>Ciudad</label>
-    <input formControlName="ciudad" class="form-control" />
+      <div *ngIf="parcelas.length > 0">
+        <form [formGroup]="form" class="mb-4">
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form-label">Fecha planeada de siembra:</label>
+              <input formControlName="fechaSiembra" type="date" class="form-control" />
+              <small class="form-text text-muted">Esta fecha se usa para evaluar la temporada y precios esperados</small>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Parcela específica (opcional):</label>
+              <select formControlName="parcela" class="form-control">
+                <option value="">Todas las parcelas</option>
+                <option *ngFor="let parcela of parcelas" [value]="parcela._id">
+                  {{ parcela.nombre }} - {{ parcela.ciudad?.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <button class="btn btn-success me-2" type="button" (click)="consultarTodas()" [disabled]="cargando">
+              <i class="fas fa-chart-line" *ngIf="!cargando"></i>
+              <i class="fas fa-spinner fa-spin" *ngIf="cargando"></i>
+              {{ cargando ? 'Consultando...' : 'Obtener Recomendaciones' }}
+            </button>
+            
+            <button class="btn btn-primary" type="button" (click)="consultarParcela()" 
+                    [disabled]="!form.get('parcela')?.value || cargando">
+              <i class="fas fa-map-marker-alt"></i>
+              Consultar Parcela Específica
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
+<<<<<<< Updated upstream
   <div class="mb-2">
     <label>Fecha</label>
     <input formControlName="fecha" type="date" class="form-control" />
@@ -96,6 +142,41 @@
         </div>
 >>>>>>> Stashed changes
 
+=======
+  <!-- Resultados -->
+  <div *ngIf="resultado" class="mt-4">
+    <div class="alert alert-success">
+      <strong><i class="fas fa-check-circle"></i> Recomendaciones generadas exitosamente</strong><br>
+      <small>Fecha: {{ formatearFecha(resultado.fecha_siembra) }} | 
+             Parcelas evaluadas: {{ resultado.total_parcelas }}</small>
+    </div>
+    
+    <div *ngFor="let recomendacion of resultado.recomendaciones" class="card mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+          <i class="fas fa-map-marker-alt"></i> 
+          {{ recomendacion.parcela.nombre }} - {{ recomendacion.parcela.ciudad }}
+        </h5>
+        <small>
+          Coordenadas: {{ recomendacion.parcela.coordenadas?.latitud }}, {{ recomendacion.parcela.coordenadas?.longitud }}
+        </small>
+      </div>
+      
+      <div class="card-body">
+        <!-- Estado de datos -->
+        <div *ngIf="recomendacion.estado_datos" class="row mb-3">
+          <div class="col-md-12">
+            <div class="alert alert-info">
+              <strong>Estado de la información:</strong><br>
+              • Productos evaluados: {{ recomendacion.estado_datos.total_productos_evaluados }}<br>
+              • Con precios históricos: {{ recomendacion.estado_datos.productos_con_precios }}<br>
+              • Sin precios: {{ recomendacion.estado_datos.productos_sin_precios }}<br>
+              • Datos climáticos: {{ recomendacion.estado_datos.datos_climaticos_disponibles ? 'Disponibles' : 'No disponibles' }}
+            </div>
+          </div>
+        </div>
+
+>>>>>>> Stashed changes
         <!-- Alertas generales -->
         <div *ngIf="recomendacion.alertas_generales?.length" class="alert alert-warning">
           <strong>⚠️ Consideraciones importantes:</strong>

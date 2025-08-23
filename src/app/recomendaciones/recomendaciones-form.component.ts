@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+<<<<<<< Updated upstream
 import { HttpClient } from '@angular/common/http';
 
 import { CommonModule } from '@angular/common';
@@ -12,7 +13,13 @@ import { ParcelaService } from '../parcelas/parcela.service';
 import { environment } from '../../environments/environment';
 
 import { Component } from '@angular/core';
+=======
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+>>>>>>> Stashed changes
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ParcelaService } from '../parcelas/parcela.service';
+import { environment } from '../../environments/environment';
 
 
 @Component({
