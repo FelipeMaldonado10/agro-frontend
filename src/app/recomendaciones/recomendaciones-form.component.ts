@@ -1,26 +1,10 @@
 
-import { Component } from '@angular/core';
-
-import { CommonModule } from '@angular/common';
-<<<<<<< Updated upstream
-import { HttpClient } from '@angular/common/http';
-
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ParcelaService } from '../parcelas/parcela.service';
 import { environment } from '../../environments/environment';
-
-import { Component } from '@angular/core';
-=======
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
->>>>>>> Stashed changes
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ParcelaService } from '../parcelas/parcela.service';
-import { environment } from '../../environments/environment';
-
 
 @Component({
   selector: 'app-recomendaciones-form',
@@ -76,6 +60,15 @@ export class RecomendacionesFormComponent implements OnInit {
         console.error('Error cargando parcelas:', err);
       }
     });
+  }
+
+  consultar() {
+    // Método que puede ser llamado desde el template
+    if (this.form.get('parcela')?.value) {
+      this.consultarParcela();
+    } else {
+      this.consultarTodas();
+    }
   }
 
   consultarTodas() {
