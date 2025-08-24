@@ -35,6 +35,17 @@ export class AuthService {
     }
   }
 
+  isAuthenticated(): boolean {
+    if (typeof window === 'undefined') return false;
+    const token = window.localStorage.getItem('token');
+    return !!token && this.getUserInfo() !== null;
+  }
+
+  getToken(): string | null {
+    if (typeof window === 'undefined') return null;
+    return window.localStorage.getItem('token');
+  }
+
   isAdmin(): boolean {
     const user = this.getUserInfo();
     return user && ['admin', 'superadmin'].includes(user.rol);

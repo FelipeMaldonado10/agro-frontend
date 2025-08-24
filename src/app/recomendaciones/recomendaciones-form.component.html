@@ -147,9 +147,130 @@
                 <div *ngIf="opcion.observaciones" class="mt-2 small text-muted">
                   <strong>💡 Observaciones:</strong> {{ opcion.observaciones }}
                 </div>
+
+                <!-- Botón para sembrar -->
+                <div class="mt-3">
+                  <button 
+                    class="btn btn-sm w-100"
+                    [class]="i === 0 ? 'btn-success' : (i === 1 ? 'btn-warning' : 'btn-info')"
+                    (click)="sembrarProducto(opcion, recomendacion.parcela)">
+                    🌱 Sembrar este producto
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Botón para ver todos los productos -->
+        <div class="mt-3 text-center">
+          <button 
+            class="btn btn-outline-primary"
+            (click)="verTodosLosProductos(recomendacion.parcela)">
+            📋 Ver todos los productos disponibles
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para crear cultivo -->
+  <div *ngIf="mostrarModalCultivo" class="modal d-block" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">
+            🌱 Sembrar {{ productoSeleccionado?.producto }}
+          </h5>
+          <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Parcela:</strong> {{ parcelaSeleccionada?.nombre }}
+            </div>
+            <div class="col-md-6">
+              <strong>Ciudad:</strong> {{ parcelaSeleccionada?.ciudad }}
+            </div>
+          </div>
+
+          <div class="alert alert-info">
+            <strong>Score de recomendación:</strong> {{ productoSeleccionado?.score }}/10 - 
+            Posición #{{ productoSeleccionado?.posicion_ranking }}
+          </div>
+
+          <form [formGroup]="formCultivo">
+            <div class="row">
+              <div class="col-md-6">
+                <label class="form-label">Cantidad a sembrar *</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  formControlName="cantidad_sembrada"
+                  min="1"
+                  step="1">
+                <small class="text-muted">Número de plantas, semillas o unidades</small>
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label">Área de siembra *</label>
+                <div class="input-group">
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    formControlName="area_sembrada"
+                    min="0.1"
+                    step="0.1">
+                  <select class="form-select" formControlName="unidad_area" style="max-width: 100px;">
+                    <option value="m2">m²</option>
+                    <option value="hectarea">hectárea</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-12">
+                <label class="form-label">Fecha de siembra</label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  formControlName="fecha_siembra">
+              </div>
+            </div>
+
+            <!-- Estimaciones automáticas -->
+            <div class="mt-4 p-3 bg-light rounded">
+              <h6>📊 Estimaciones (se calcularán automáticamente):</h6>
+              <ul class="mb-0">
+                <li>Cantidad estimada de producción</li>
+                <li>Ingresos proyectados</li>
+                <li>Fecha estimada de cosecha</li>
+                <li>Rendimiento por área</li>
+              </ul>
+            </div>
+          </form>
+        </div>
+        
+        <div class="modal-footer">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            (click)="cerrarModal()"
+            [disabled]="creandoCultivo">
+            Cancelar
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-success" 
+            (click)="crearCultivo()"
+            [disabled]="!formCultivo.valid || creandoCultivo">
+            <span *ngIf="!creandoCultivo">🌱 Crear Cultivo</span>
+            <span *ngIf="creandoCultivo">
+              <i class="fas fa-spinner fa-spin"></i> Creando...
+            </span>
+          </button>
         </div>
       </div>
     </div>
