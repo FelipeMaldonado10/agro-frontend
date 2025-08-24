@@ -129,11 +129,13 @@ export class MarketPriceListComponent implements OnInit {
   }
 
   getProductName(price: MarketPrice): string {
-    return price.producto || 'ID no disponible';
+    // Muestra el nombre si está disponible, si no, el ID
+    return price.productoInfo?.nombre || price.producto || 'ID no disponible';
   }
 
   getCityName(price: MarketPrice): string {
-    return price.ciudad || 'ID no disponible';
+    // Muestra el nombre si está disponible, si no, el ID
+    return price.ciudadInfo?.nombre || price.ciudad || 'ID no disponible';
   }
 }
 
