@@ -16,6 +16,7 @@ import { UserListComponent } from './user-management/user-list/user-list.compone
 import { marketPricesManagementRoutes } from './market-prices-management/market-prices-management.routes';
 import { productoManagementRoutes } from './producto-management/producto-management.routes';
 import { recomendacionesRoutes } from './recomendaciones/recomendaciones.routes';
+import { cultivoRoutes } from './cultivos/cultivo.routes';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -37,6 +38,12 @@ export const routes: Routes = [
     ...marketPricesManagementRoutes,
     ...productoManagementRoutes,
     ...recomendacionesRoutes,
+    // Rutas de Cultivos
+    { 
+      path: 'cultivos', 
+      children: cultivoRoutes,
+      canActivate: [AuthGuard, ProductorGuard]
+    },
 
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: '**', redirectTo: '/dashboard' }
