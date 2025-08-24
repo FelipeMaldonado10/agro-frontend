@@ -95,3 +95,28 @@ nav::after {
   }
 }
 
+.market-prices-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.market-prices-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.market-prices-btn:active {
+  transform: translateY(0);
+}
+
+.market-prices-btn i {
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+

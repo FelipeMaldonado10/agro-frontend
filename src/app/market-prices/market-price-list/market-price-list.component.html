@@ -1,0 +1,75 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-chart-line mr-2"></i>
+            Precios de Mercado
+          </h3>
+        </div>
+        <div class="card-body">
+          <div *ngIf="loading" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Cargando...</span>
+            </div>
+            <p class="mt-2">Cargando precios de mercado...</p>
+          </div>
+
+          <div *ngIf="error && !loading" class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            {{ error }}
+            <button class="btn btn-sm btn-outline-danger ml-2" (click)="loadMarketPrices()">
+              <i class="fas fa-redo mr-1"></i>
+              Reintentar
+            </button>
+          </div>
+
+          <div *ngIf="!loading && !error && marketPrices.length === 0" class="text-center text-muted">
+            <i class="fas fa-inbox fa-3x mb-3"></i>
+            <p>No hay precios de mercado registrados</p>
+          </div>
+
+          <div *ngIf="!loading && !error && marketPrices.length > 0" class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Producto</th>
+                  <th>Ciudad</th>
+                  <th>Precio</th>
+                  <th>Fecha</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let price of marketPrices" class="clickable-row">
+                  <td>
+                    <i class="fas fa-seedling text-success mr-2"></i>
+                    {{ getProductName(price) }}
+                  </td>
+                  <td>
+                    <i class="fas fa-map-marker-alt text-danger mr-1"></i>
+                    {{ getCityName(price) }}
+                  </td>
+                  <td class="font-weight-bold text-primary">
+                    {{ formatPrice(price.precio) }}
+                  </td>
+                  <td>{{ formatDate(price.fecha) }}</td>
+                  <td>
+                    <button
+                      class="btn btn-success btn-sm detail-btn"
+                      (click)="viewDetail(price.id)"
+                      title="Ver detalle completo del precio">
+                      <i class="fas fa-eye mr-1"></i>
+                      Ver Detalle
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

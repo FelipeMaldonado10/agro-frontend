@@ -45,25 +45,33 @@ export class MarketPricesComponent implements OnInit {
     this.cargarCiudades();
   }
 
-  cargarCiudades() {
-    this.ciudadService.obtenerCiudades().subscribe({
-      next: (ciudades) => {
-        this.ciudades = ciudades;
-      },
-      error: (error) => {
-        console.error('Error al cargar ciudades:', error);
-      }
+  cargarCiudades(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.ciudadService.obtenerCiudades().subscribe({
+        next: (ciudades) => {
+          this.ciudades = ciudades;
+          resolve();
+        },
+        error: (error) => {
+          console.error('Error al cargar ciudades:', error);
+          reject(error);
+        }
+      });
     });
   }
 
-  cargarProductos() {
-    this.productoService.obtenerProductos().subscribe({
-      next: (productos) => {
-        this.productos = productos;
-      },
-      error: (error) => {
-        console.error('Error al cargar productos:', error);
-      }
+  cargarProductos(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.productoService.obtenerProductos().subscribe({
+        next: (productos) => {
+          this.productos = productos;
+          resolve();
+        },
+        error: (error) => {
+          console.error('Error al cargar productos:', error);
+          reject(error);
+        }
+      });
     });
   }
 
@@ -73,14 +81,11 @@ export class MarketPricesComponent implements OnInit {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     this.http.get<any[]>(this.apiUrl, { headers }).subscribe({
       next: (prices) => {
-        this.prices = prices;
-        this.prices.forEach(price => {
-          const producto = this.productos.find(p => p._id === price.producto);
-          price.nombreProducto = producto ? producto.nombre : 'Producto no encontrado';
-
-          const ciudad = this.ciudades.find(c => c._id === price.ciudad);
-          price.nombreCiudad = ciudad ? ciudad.nombre : 'Ciudad no encontrada';
-        });
+        this.prices = prices.map(price => ({
+          ...price,
+          nombreProducto: price.producto?.nombre || 'Producto no encontrado',
+          nombreCiudad: price.ciudad?.nombre || 'Ciudad no encontrada'
+        }));
       },
       error: (error) => {
         console.error('Error al cargar precios:', error);
@@ -90,8 +95,33 @@ export class MarketPricesComponent implements OnInit {
 
   submitForm() {
     if (this.form.invalid) return;
+    
+    // Asegurarse de que los productos y ciudades estén cargados
+    if (this.productos.length === 0 || this.ciudades.length === 0) {
+      Promise.all([
+        this.cargarProductos(),
+        this.cargarCiudades()
+      ]).then(() => {
+        this.enviarFormulario();
+      });
+    } else {
+      this.enviarFormulario();
+    }
+  }
+
+  private enviarFormulario() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    // Verificar que el producto y la ciudad existan antes de enviar
+    const productoSeleccionado = this.productos.find(p => p._id === this.form.value.producto);
+    const ciudadSeleccionada = this.ciudades.find(c => c._id === this.form.value.ciudad);
+    
+    if (!productoSeleccionado || !ciudadSeleccionada) {
+      console.error('Producto o ciudad no válidos');
+      return;
+    }
+    
     this.http.post(this.apiUrl, this.form.value, { headers }).subscribe({
       next: () => {
         this.form.reset();
@@ -145,19 +175,32 @@ export class MarketPricesComponent implements OnInit {
     if (!file) return;
     this.uploading = true;
     this.fileError = '';
-    const formData = new FormData();
-    formData.append('file', file);
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    this.http.post(`${this.apiUrl}/upload`, formData, { headers }).subscribe({
-      next: () => {
-        this.uploading = false;
-        this.loadPrices();
-      },
-      error: err => {
-        this.uploading = false;
-        this.fileError = 'Error al subir el archivo';
-      }
+
+    // Asegurarse de que los productos y ciudades estén cargados antes de subir el archivo
+    Promise.all([
+      this.productos.length === 0 ? this.cargarProductos() : Promise.resolve(),
+      this.ciudades.length === 0 ? this.cargarCiudades() : Promise.resolve()
+    ]).then(() => {
+      const formData = new FormData();
+      formData.append('file', file);
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      this.http.post(`${this.apiUrl}/upload`, formData, { headers }).subscribe({
+        next: () => {
+          this.uploading = false;
+          // Esperar un momento antes de cargar los precios para asegurar que los datos estén actualizados
+          setTimeout(() => this.loadPrices(), 500);
+        },
+        error: err => {
+          this.uploading = false;
+          this.fileError = 'Error al subir el archivo';
+          console.error('Error detallado:', err);
+        }
+      });
+    }).catch(error => {
+      this.uploading = false;
+      this.fileError = 'Error al cargar datos necesarios';
+      console.error('Error al cargar productos o ciudades:', error);
     });
   }
 }
