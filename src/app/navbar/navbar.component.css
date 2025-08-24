@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 nav {
   background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
   padding: 1rem;
@@ -47,3 +48,327 @@ nav a.active {
   }
 }
 
+=======
+/* Fondo y contenedor principal */
+nav {
+  background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+  padding: 1.2rem 2rem;
+  position: relative;
+  box-shadow: 0 2px 12px rgba(67, 160, 71, 0.10);
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  transition: padding 0.3s ease;
+}
+
+/* Logo */
+.navbar-brand {
+  color: var(--text-light);
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  margin-right: 2rem;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 10;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Contenedor de elementos de navegación */
+.nav-items-container {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* Menú de navegación (escritorio) */
+.navbar-nav {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav-item {
+  flex: 0 0 auto;
+  text-align: center;
+}
+
+/* Estilo general de los enlaces */
+nav a.nav-link,
+.dropdown-item a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+}
+
+nav a.nav-link:hover,
+.dropdown-item a:hover {
+  background: var(--accent-green);
+  color: var(--text-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+nav a.nav-link.active,
+.dropdown-item a.active {
+  background: var(--primary-green);
+  color: var(--text-light);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(56, 142, 60, 0.3);
+}
+
+/* Texto del usuario (rol y nombre) */
+.navbar-text {
+  color: var(--text-light);
+  margin-left: 1rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Botón de menú hamburguesa (móvil) */
+.menu-toggle-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 101;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.menu-toggle-btn:hover .menu-icon::before,
+.menu-toggle-btn:hover .menu-icon::after,
+.menu-toggle-btn:hover .menu-icon {
+  background: var(--accent-green);
+}
+
+.menu-icon {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: var(--text-light);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.menu-icon::before,
+.menu-icon::after {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 3px;
+  background: var(--text-light);
+  transition: all 0.3s ease;
+}
+
+.menu-icon::before {
+  top: -8px;
+}
+
+.menu-icon::after {
+  bottom: -8px;
+}
+
+/* Animación del icono al abrir menú */
+nav.menuOpen .menu-icon {
+  background: transparent;
+}
+
+nav.menuOpen .menu-icon::before {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+nav.menuOpen .menu-icon::after {
+  transform: rotate(-45deg);
+  bottom: 0;
+}
+
+/* Menú desplegable (móvil) */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 0;
+}
+
+.dropdown-menu.show {
+  max-height: 600px;
+  opacity: 1;
+  visibility: visible;
+  padding: 1rem 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.dropdown-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-item a {
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 0.3rem 0;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.dropdown-item a:hover {
+  background: var(--accent-green);
+  color: var(--text-dark);
+}
+
+.dropdown-item a.active {
+  background: rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+}
+
+/* Decoraciones flotantes (efectos visuales suaves) */
+nav::before,
+nav::after {
+  content: "";
+  position: absolute;
+  opacity: 0.12;
+  z-index: 0;
+  pointer-events: none;
+}
+
+nav::before {
+  top: -30px;
+  left: -40px;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, var(--accent-green) 60%, var(--primary-green) 100%);
+  border-radius: 50%;
+  animation: floatShape 6s infinite alternate;
+}
+
+nav::after {
+  bottom: -30px;
+  right: -40px;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--secondary-green) 60%, var(--accent-green) 100%);
+  border-radius: 50%;
+  animation: floatShapeReverse 7s infinite alternate;
+}
+
+@keyframes floatShape {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(20px) scale(1.08); }
+}
+
+@keyframes floatShapeReverse {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-20px) scale(1.12); }
+}
+
+/* Responsive */
+
+@media (max-width: 992px) {
+  nav {
+    padding: 1rem 1.5rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.6rem;
+  }
+
+  .navbar-nav {
+    display: none;
+  }
+
+  .nav-items-container {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    position: relative;
+  }
+
+  .menu-toggle-btn {
+    display: block;
+  }
+
+  .navbar-text {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  nav {
+    padding: 0.8rem 1rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.4rem;
+    margin-right: 1rem;
+  }
+
+  nav a.nav-link,
+  .dropdown-item a {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .navbar-text {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .dropdown-menu {
+    padding: 0.8rem 1rem;
+  }
+
+  .dropdown-item a {
+    padding: 0.7rem 1rem;
+  }
+}
+>>>>>>> Stashed changes

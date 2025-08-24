@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/">AgroTracker</a>
@@ -27,4 +28,99 @@
       </span>
     </div>
   </div>
+=======
+<nav class="navbar" [ngClass]="{ 'menuOpen': menuOpen }">
+  <div class="container-fluid d-flex align-items-center">
+    <!-- Logo -->
+    <a class="navbar-brand" routerLink="/" aria-current="page">AgroTracker</a>
+
+    <!-- Contenedor de elementos de navegación -->
+    <div class="nav-items-container">
+      <!-- Menú horizontal (solo escritorio) -->
+      <ul class="navbar-nav" *ngIf="!isMobileView">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" aria-current="page">Inicio</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && !isAdmin && !isSuperadmin">
+          <a class="nav-link" routerLink="/parcelas" routerLinkActive="active">Mis Parcelas</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn && !isSuperadmin">
+          <a class="nav-link" routerLink="/register" routerLinkActive="active">Registro</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn && !isSuperadmin">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
+          <a class="nav-link" routerLink="/user-management" routerLinkActive="active">Gestión de Usuarios</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && isAdmin">
+          <a class="nav-link" routerLink="/ciudades" routerLinkActive="active">Gestión de Ciudades</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
+          <a class="nav-link" routerLink="/productos/nuevo" routerLinkActive="active">Registrar Producto</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
+          <a class="nav-link" routerLink="/precios/nuevo" routerLinkActive="active">Registrar Precio Histórico</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a class="nav-link" routerLink="/recomendaciones" routerLinkActive="active">Recomendaciones</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a class="nav-link" (click)="logout()">Cerrar sesión</a>
+        </li>
+      </ul>
+
+      <!-- Texto del usuario (visible en todas las pantallas) -->
+      <span class="navbar-text" *ngIf="isLoggedIn">
+        {{ user?.nombre }} ({{ user?.rol }})
+      </span>
+    </div>
+
+    <!-- Botón de menú para móviles -->
+    <button
+      class="menu-toggle-btn"
+      type="button"
+      (click)="toggleMenu()"
+      aria-label="Toggle navigation"
+    >
+      <span class="menu-icon"></span>
+    </button>
+
+    <!-- Menú desplegable (móvil) -->
+    <div class="dropdown-menu" [ngClass]="{ 'show': menuOpen && isMobileView }">
+      <ul class="dropdown-nav">
+        <li class="dropdown-item">
+          <a routerLink="/" routerLinkActive="active" (click)="closeNavbar()" aria-current="page">Inicio</a>
+        </li>
+        <li class="dropdown-item" *ngIf="isLoggedIn && !isAdmin && !isSuperadmin">
+          <a routerLink="/parcelas" routerLinkActive="active" (click)="closeNavbar()">Mis Parcelas</a>
+        </li>
+        <li class="dropdown-item" *ngIf="!isLoggedIn && !isSuperadmin">
+          <a routerLink="/register" routerLinkActive="active" (click)="closeNavbar()">Registro</a>
+        </li>
+        <li class="dropdown-item" *ngIf="!isLoggedIn && !isSuperadmin">
+          <a routerLink="/login" routerLinkActive="active" (click)="closeNavbar()">Login</a>
+        </li>
+        <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin">
+          <a routerLink="/user-management" routerLinkActive="active" (click)="closeNavbar()">Gestión de Usuarios</a>
+        </li>
+        <li class="dropdown-item" *ngIf="isLoggedIn && isAdmin">
+          <a routerLink="/ciudades" routerLinkActive="active" (click)="closeNavbar()">Gestión de Ciudades</a>
+        </li>
+        <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin">
+          <a routerLink="/productos/nuevo" routerLinkActive="active" (click)="closeNavbar()">Registrar Producto</a>
+        </li>
+        <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin">
+          <a routerLink="/precios/nuevo" routerLinkActive="active" (click)="closeNavbar()">Registrar Precio Histórico</a>
+        </li>
+        <li class="dropdown-item" *ngIf="isLoggedIn">
+          <a routerLink="/recomendaciones" routerLinkActive="active" (click)="closeNavbar()">Recomendaciones</a>
+        </li>
+        <li class="dropdown-item" *ngIf="isLoggedIn">
+          <a (click)="logout(); closeNavbar();">Cerrar sesión</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+>>>>>>> Stashed changes
 </nav>
