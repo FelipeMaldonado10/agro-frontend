@@ -1,7 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ProductoService } from '../producto-management/producto.service';
+import { Producto } from '../producto-management/producto.service';
+import { CiudadService } from '../ciudades/ciudad.service';
+import { environment } from '../../environments/environment';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-market-prices',
@@ -10,41 +15,129 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule]
 })
-export class MarketPricesComponent {
+export class MarketPricesComponent implements OnInit {
   prices: any[] = [];
   form: FormGroup;
   uploading = false;
   fileError = '';
+  productos: Producto[] = [];
+  ciudades: any[] = [];
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {
+  private apiUrl = `${environment.apiUrl}/market-prices`;
+
+  constructor(
+    private http: HttpClient,
+    private fb: FormBuilder,
+    private productoService: ProductoService,
+    private ciudadService: CiudadService
+  ) {
     this.form = this.fb.group({
       producto: ['', Validators.required],
+      ciudad: ['', Validators.required],
       fecha: ['', Validators.required],
-      precio: ['', Validators.required],
-      mercado: [''],
-      departamento: ['']
+      precio: ['', Validators.required]
     });
     this.loadPrices();
+    this.cargarProductos();
+  }
+
+  ngOnInit() {
+    this.cargarProductos();
+    this.cargarCiudades();
+  }
+
+  cargarCiudades() {
+    this.ciudadService.obtenerCiudades().subscribe({
+      next: (ciudades) => {
+        this.ciudades = ciudades;
+      },
+      error: (error) => {
+        console.error('Error al cargar ciudades:', error);
+      }
+    });
+  }
+
+  cargarProductos() {
+    this.productoService.obtenerProductos().subscribe({
+      next: (productos) => {
+        this.productos = productos;
+      },
+      error: (error) => {
+        console.error('Error al cargar productos:', error);
+      }
+    });
   }
 
   loadPrices() {
-    this.http.get<any[]>('/api/market-prices').subscribe(data => {
-      this.prices = data;
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    this.http.get<any[]>(this.apiUrl, { headers }).subscribe({
+      next: (prices) => {
+        this.prices = prices;
+        this.prices.forEach(price => {
+          const producto = this.productos.find(p => p._id === price.producto);
+          price.nombreProducto = producto ? producto.nombre : 'Producto no encontrado';
+          
+          const ciudad = this.ciudades.find(c => c._id === price.ciudad);
+          price.nombreCiudad = ciudad ? ciudad.nombre : 'Ciudad no encontrada';
+        });
+      },
+      error: (error) => {
+        console.error('Error al cargar precios:', error);
+      }
     });
   }
 
   submitForm() {
     if (this.form.invalid) return;
-    this.http.post('/api/market-prices', this.form.value).subscribe(() => {
-      this.form.reset();
-      this.loadPrices();
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    this.http.post(this.apiUrl, this.form.value, { headers }).subscribe({
+      next: () => {
+        this.form.reset();
+        this.loadPrices();
+      },
+      error: (error) => {
+        console.error('Error al guardar precio:', error);
+      }
     });
   }
 
+  setToday() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    this.form.patchValue({ fecha: `${year}-${month}-${day}` });
+  }
+
   deletePrice(id: string) {
-    this.http.delete(`/api/market-prices/${id}`).subscribe(() => {
-      this.loadPrices();
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    this.http.delete(`${this.apiUrl}/${id}`, { headers }).subscribe({
+      next: () => {
+        this.loadPrices();
+      },
+      error: (error) => {
+        console.error('Error al eliminar precio:', error);
+      }
     });
+  }
+
+  downloadTemplate() {
+    const template = [
+      {
+        producto: 'Nombre del Producto',
+        fecha: 'YYYY-MM-DD',
+        precio: 'Precio en números',
+        ciudad: 'Nombre de la Ciudad'
+      }
+    ];
+
+    const ws = XLSX.utils.json_to_sheet(template);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Plantilla');
+    XLSX.writeFile(wb, 'plantilla_precios.xlsx');
   }
 
   onFileChange(event: any) {
@@ -54,7 +147,9 @@ export class MarketPricesComponent {
     this.fileError = '';
     const formData = new FormData();
     formData.append('file', file);
-    this.http.post('/api/market-prices/upload', formData).subscribe({
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    this.http.post(`${this.apiUrl}/upload`, formData, { headers }).subscribe({
       next: () => {
         this.uploading = false;
         this.loadPrices();

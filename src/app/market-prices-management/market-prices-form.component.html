@@ -2,16 +2,23 @@
   <h4>Registrar precio manualmente</h4>
   <div class="mb-2">
     <label>Producto</label>
-    <input formControlName="producto" class="form-control" />
+    <select formControlName="producto" class="form-control" required>
+      <option value="">Seleccione un producto</option>
+      <option *ngFor="let producto of productos" [value]="producto._id">{{ producto.nombre }}</option>
+    </select>
   </div>
   <div class="mb-2">
     <label>Ciudad</label>
-    <input formControlName="ciudad" class="form-control" />
+    <select formControlName="ciudad" class="form-control" required>
+      <option value="">Seleccione una ciudad</option>
+      <option *ngFor="let ciudad of ciudades" [value]="ciudad._id">{{ ciudad.nombre }}</option>
+    </select>
   </div>
   <div class="mb-2">
     <label>Fecha</label>
     <input formControlName="fecha" type="date" class="form-control" />
   </div>
+  <button type="button" class="btn btn-info" (click)="setToday()">Hoy</button>
   <div class="mb-2">
     <label>Precio</label>
     <input formControlName="precio" type="number" class="form-control" />
@@ -22,6 +29,9 @@
 <div class="mb-3 p-3 border rounded bg-light">
   <h4>Subir archivo Excel/CSV</h4>
   <input type="file" (change)="onFileChange($event)" class="form-control mb-2" />
-  <button class="btn btn-primary" (click)="subirArchivo()" [disabled]="!archivo">Subir archivo</button>
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" (click)="subirArchivo()" [disabled]="!archivo">Subir archivo</button>
+    <button type="button" class="btn btn-info" (click)="downloadTemplate()">Descargar Plantilla</button>
+  </div>
 </div>
 <div class="mt-2 text-success">{{ mensaje }}</div>

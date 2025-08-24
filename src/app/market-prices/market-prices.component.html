@@ -1,16 +1,23 @@
 <div class="market-prices-container">
   <h2>Gestión de Precios Históricos</h2>
   <form [formGroup]="form" (ngSubmit)="submitForm()" class="price-form">
-    <input formControlName="producto" placeholder="Producto" required>
+    <select formControlName="producto" class="form-select" required>
+      <option value="">Seleccione un producto</option>
+      <option *ngFor="let producto of productos" [value]="producto._id">{{ producto.nombre }}</option>
+    </select>
+    <select formControlName="ciudad" class="form-select" required>
+      <option value="">Seleccione una ciudad</option>
+      <option *ngFor="let ciudad of ciudades" [value]="ciudad._id">{{ ciudad.nombre }}</option>
+    </select>
     <input formControlName="fecha" type="date" placeholder="Fecha" required>
+    <button type="button" (click)="setToday()">Hoy</button>
     <input formControlName="precio" type="number" placeholder="Precio" required>
-    <input formControlName="mercado" placeholder="Mercado">
-    <input formControlName="departamento" placeholder="Departamento">
     <button type="submit" [disabled]="form.invalid">Agregar manualmente</button>
   </form>
   <div class="file-upload">
     <label for="file">Subir archivo Excel/CSV:</label>
     <input id="file" type="file" (change)="onFileChange($event)" accept=".xlsx,.xls,.csv">
+    <button type="button" (click)="downloadTemplate()" class="download-template">Descargar Plantilla</button>
     <span *ngIf="uploading">Subiendo archivo...</span>
     <span class="error" *ngIf="fileError">{{ fileError }}</span>
   </div>
@@ -19,20 +26,18 @@
     <thead>
       <tr>
         <th>Producto</th>
+        <th>Ciudad</th>
         <th>Fecha</th>
         <th>Precio</th>
-        <th>Mercado</th>
-        <th>Departamento</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let p of prices">
-        <td>{{ p.producto }}</td>
+        <td>{{ p.nombreProducto || 'Producto no encontrado' }}</td>
+        <td>{{ p.nombreCiudad || 'Ciudad no encontrada' }}</td>
         <td>{{ p.fecha }}</td>
         <td>{{ p.precio }}</td>
-        <td>{{ p.mercado }}</td>
-        <td>{{ p.departamento }}</td>
         <td><button (click)="deletePrice(p._id)">Eliminar</button></td>
       </tr>
     </tbody>

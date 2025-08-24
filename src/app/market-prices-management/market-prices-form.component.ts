@@ -1,7 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ProductoService } from '../producto-management/producto.service';
+import { Producto } from '../producto-management/producto.service';
+import { CiudadService } from '../ciudades/ciudad.service';
+import { environment } from '../../environments/environment';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-market-prices-form',
@@ -10,12 +15,21 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './market-prices-form.component.html',
   styleUrls: ['./market-prices-form.component.css']
 })
-export class MarketPricesFormComponent {
+export class MarketPricesFormComponent implements OnInit {
   form: FormGroup;
   mensaje: string = '';
   archivo: File | null = null;
+  productos: Producto[] = [];
+  ciudades: any[] = [];
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  private apiUrl = `${environment.apiUrl}/market-prices`;
+
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private productoService: ProductoService,
+    private ciudadService: CiudadService
+  ) {
     this.form = this.fb.group({
       producto: ['', Validators.required],
       ciudad: ['', Validators.required],
@@ -24,9 +38,40 @@ export class MarketPricesFormComponent {
     });
   }
 
+  ngOnInit() {
+    this.cargarProductos();
+    this.cargarCiudades();
+  }
+
+  cargarProductos() {
+    this.productoService.obtenerProductos().subscribe({
+      next: (productos) => {
+        this.productos = productos;
+      },
+      error: (error) => {
+        console.error('Error al cargar productos:', error);
+        this.mensaje = 'Error al cargar productos';
+      }
+    });
+  }
+
+  cargarCiudades() {
+    this.ciudadService.obtenerCiudades().subscribe({
+      next: (ciudades) => {
+        this.ciudades = ciudades;
+      },
+      error: (error) => {
+        console.error('Error al cargar ciudades:', error);
+        this.mensaje = 'Error al cargar ciudades';
+      }
+    });
+  }
+
   guardarManual() {
     if (this.form.valid) {
-      this.http.post('/api/market-prices', this.form.value).subscribe({
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      this.http.post(this.apiUrl, this.form.value, { headers }).subscribe({
         next: () => this.mensaje = 'Registro guardado correctamente',
         error: err => this.mensaje = err.error?.error || 'Error al guardar'
       });
@@ -37,11 +82,37 @@ export class MarketPricesFormComponent {
     this.archivo = event.target.files[0];
   }
 
+  setToday() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    this.form.patchValue({ fecha: `${year}-${month}-${day}` });
+  }
+
+  downloadTemplate() {
+    const template = [
+      {
+        producto: 'Nombre del Producto',
+        fecha: 'YYYY-MM-DD',
+        precio: 'Precio en números',
+        ciudad: 'Nombre de la Ciudad'
+      }
+    ];
+
+    const ws = XLSX.utils.json_to_sheet(template);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Plantilla');
+    XLSX.writeFile(wb, 'plantilla_precios.xlsx');
+  }
+
   subirArchivo() {
     if (this.archivo) {
       const formData = new FormData();
       formData.append('file', this.archivo);
-      this.http.post('/api/market-prices/upload', formData).subscribe({
+      const token = localStorage.getItem('token');
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      this.http.post(`${this.apiUrl}/upload`, formData, { headers }).subscribe({
         next: () => this.mensaje = 'Archivo subido correctamente',
         error: err => this.mensaje = err.error?.error || 'Error al subir archivo'
       });
