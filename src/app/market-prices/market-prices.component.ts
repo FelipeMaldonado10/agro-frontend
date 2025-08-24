@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ProductoService } from '../producto-management/producto.service';
-import { Producto } from '../producto-management/producto.service';
-import { CiudadService } from '../ciudades/ciudad.service';
-import { environment } from '../../environments/environment';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
+import { environment } from '../../environments/environment';
+import { CiudadService } from '../ciudades/ciudad.service';
+import { Producto, ProductoService } from '../producto-management/producto.service';
 
 @Component({
   selector: 'app-market-prices',
@@ -68,6 +67,7 @@ export class MarketPricesComponent implements OnInit {
     });
   }
 
+
   loadPrices() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -77,7 +77,7 @@ export class MarketPricesComponent implements OnInit {
         this.prices.forEach(price => {
           const producto = this.productos.find(p => p._id === price.producto);
           price.nombreProducto = producto ? producto.nombre : 'Producto no encontrado';
-          
+
           const ciudad = this.ciudades.find(c => c._id === price.ciudad);
           price.nombreCiudad = ciudad ? ciudad.nombre : 'Ciudad no encontrada';
         });
