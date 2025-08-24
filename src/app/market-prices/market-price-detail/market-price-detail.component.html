@@ -1,0 +1,12 @@
+<!-- market-price-detail.component.html -->
+<div class="market-price-detail">
+  <div *ngIf="loading" class="loading">Cargando...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="price" class="detail-card">
+    <h2>Detalle del Precio de Mercado</h2>
+    <p><strong>Producto:</strong> {{ price.producto }}</p>
+    <p><strong>Ciudad:</strong> {{ price.ciudad }}</p>
+    <p><strong>Fecha:</strong> {{ price.fecha | date:'longDate' }}</p>
+    <p><strong>Precio:</strong> {{ price.precio | currency:'COP':'symbol':'1.0-0' }}</p>
+  </div>
+</div>

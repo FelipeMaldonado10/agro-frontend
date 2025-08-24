@@ -35,13 +35,30 @@
 }
 .file-upload {
   margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 .file-upload label {
   font-weight: bold;
-  margin-right: 1rem;
 }
 .file-upload input[type="file"] {
-  margin-right: 1rem;
+  flex: 1;
+  min-width: 200px;
+}
+.download-template {
+  background: #2196f3;
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.download-template:hover {
+  background: #1976d2;
 }
 .error {
   color: #d32f2f;
