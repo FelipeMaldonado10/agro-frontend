@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,7 +12,7 @@ import { Producto, ProductoService } from '../producto-management/producto.servi
   templateUrl: './market-prices.component.html',
   styleUrls: ['./market-prices.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, DatePipe, CurrencyPipe]
 })
 export class MarketPricesComponent implements OnInit {
   prices: any[] = [];

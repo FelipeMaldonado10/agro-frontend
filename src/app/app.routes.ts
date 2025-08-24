@@ -8,14 +8,15 @@ import { SuperadminGuard } from './auth/superadmin.guard';
 import { CiudadFormComponent } from './ciudades/ciudad-form/ciudad-form.component';
 import { CiudadListComponent } from './ciudades/ciudad-list/ciudad-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { marketPricesManagementRoutes } from './market-prices-management/market-prices-management.routes';
+import { MarketPriceDetailComponent } from './market-prices/market-price-detail/market-price-detail.component';
 import { ParcelaDetailComponent } from './parcelas/parcela-detail/parcela-detail.component';
 import { ParcelaFormComponent } from './parcelas/parcela-form/parcela-form.component';
 import { ParcelaListComponent } from './parcelas/parcela-list/parcela-list.component';
-import { UserFormComponent } from './user-management/user-form/user-form.component';
-import { UserListComponent } from './user-management/user-list/user-list.component';
-import { marketPricesManagementRoutes } from './market-prices-management/market-prices-management.routes';
 import { productoManagementRoutes } from './producto-management/producto-management.routes';
 import { recomendacionesRoutes } from './recomendaciones/recomendaciones.routes';
+import { UserFormComponent } from './user-management/user-form/user-form.component';
+import { UserListComponent } from './user-management/user-list/user-list.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -37,6 +38,7 @@ export const routes: Routes = [
     ...marketPricesManagementRoutes,
     ...productoManagementRoutes,
     ...recomendacionesRoutes,
+    { path: 'market-prices/:id', component: MarketPriceDetailComponent },
 
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: '**', redirectTo: '/dashboard' }

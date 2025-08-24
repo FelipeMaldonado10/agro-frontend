@@ -23,7 +23,7 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
-    path: '/api/market-prices/:id',
+    path: 'market-prices/:id',
     renderMode: RenderMode.Client
   },
   {
