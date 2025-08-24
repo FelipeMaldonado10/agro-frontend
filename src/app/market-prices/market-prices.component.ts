@@ -155,14 +155,34 @@ export class MarketPricesComponent implements OnInit {
   }
 
   downloadTemplate() {
+    // Mostrar las listas disponibles en la consola
+    console.log('='.repeat(50));
+    console.log('PRODUCTOS DISPONIBLES (copiar y pegar el nombre exacto):');
+    console.log('='.repeat(50));
+    this.productos.forEach(p => console.log(p.nombre));
+    
+    console.log('\n' + '='.repeat(50));
+    console.log('CIUDADES DISPONIBLES (copiar y pegar el nombre exacto):');
+    console.log('='.repeat(50));
+    this.ciudades.forEach(c => console.log(c.nombre));
+    console.log('='.repeat(50));
+    console.log('IMPORTANTE: Usar los nombres EXACTOS como aparecen arriba');
+    console.log('='.repeat(50));
+    
     const template = [
       {
-        producto: 'Nombre del Producto',
-        fecha: 'YYYY-MM-DD',
-        precio: 'Precio en números',
-        ciudad: 'Nombre de la Ciudad'
-      }
-    ];
+        producto: '⚠️ IMPORTANTE: Copiar y pegar el nombre EXACTO del producto de la lista mostrada en la consola',
+        fecha: 'Formato: YYYY-MM-DD (ejemplo: 2024-01-15)',
+        precio: 'Precio en números sin símbolos ni separadores de miles (ejemplo: 1500)',
+        ciudad: '⚠️ IMPORTANTE: Copiar y pegar el nombre EXACTO de la ciudad de la lista mostrada en la consola'
+        },
+        {
+          producto: '-- NO MODIFICAR ESTOS NOMBRES --',
+          fecha: '2024-01-15',
+          precio: '1500',
+          ciudad: '-- NO MODIFICAR ESTOS NOMBRES --'
+        }
+      ];
 
     const ws = XLSX.utils.json_to_sheet(template);
     const wb = XLSX.utils.book_new();

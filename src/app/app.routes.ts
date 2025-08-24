@@ -10,6 +10,7 @@ import { CiudadListComponent } from './ciudades/ciudad-list/ciudad-list.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { marketPricesManagementRoutes } from './market-prices-management/market-prices-management.routes';
 import { MarketPriceDetailComponent } from './market-prices/market-price-detail/market-price-detail.component';
+import { MARKET_PRICES_ROUTES } from './market-prices/market-prices.routes';
 import { ParcelaDetailComponent } from './parcelas/parcela-detail/parcela-detail.component';
 import { ParcelaFormComponent } from './parcelas/parcela-form/parcela-form.component';
 import { ParcelaListComponent } from './parcelas/parcela-list/parcela-list.component';
@@ -39,6 +40,7 @@ export const routes: Routes = [
     { path: 'parcelas/:id', component: ParcelaDetailComponent, canActivate: [ProductorGuard] },
     { path: 'parcelas/editar/:id', component: ParcelaFormComponent, canActivate: [ProductorGuard] },
     // Rutas de Precios de Mercado
+    ...MARKET_PRICES_ROUTES,
     ...marketPricesManagementRoutes,
     ...productoManagementRoutes,
     ...recomendacionesRoutes,

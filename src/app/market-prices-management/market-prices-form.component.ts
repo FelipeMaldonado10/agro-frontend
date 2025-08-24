@@ -75,18 +75,36 @@ export class MarketPricesFormComponent implements OnInit {
       console.log('Productos array:', this.productos);
       console.log('Ciudades array:', this.ciudades);
 
-      // Buscar por _id para productos y ciudades
-      const productoSeleccionado = this.productos.find(p => p._id === formValues.producto);
-      const ciudadSeleccionada = this.ciudades.find(c => c._id === formValues.ciudad);
+      // Asegurarse que producto y ciudad son IDs válidos
+      let productoId = formValues.producto;
+      let ciudadId = formValues.ciudad;
 
-      // Debug: ver qué encontramos
-      console.log('Producto encontrado:', productoSeleccionado);
-      console.log('Ciudad encontrada:', ciudadSeleccionada);
+      // Si el producto no es un ID válido (24 caracteres hexadecimales), busca el ID por nombre
+      if (typeof productoId === 'string' && !productoId.match(/^[0-9a-fA-F]{24}$/)) {
+        const producto = this.productos.find(p => p.nombre.toLowerCase() === productoId.toLowerCase());
+        if (producto) {
+          productoId = producto._id;
+        } else {
+          this.mensaje = `Error: No se encontró el producto "${productoId}"`;
+          return;
+        }
+      }
 
-      // Crear objeto con nombres reales
+      // Si la ciudad no es un ID válido (24 caracteres hexadecimales), busca el ID por nombre
+      if (typeof ciudadId === 'string' && !ciudadId.match(/^[0-9a-fA-F]{24}$/)) {
+        const ciudad = this.ciudades.find(c => c.nombre.toLowerCase() === ciudadId.toLowerCase());
+        if (ciudad) {
+          ciudadId = ciudad._id;
+        } else {
+          this.mensaje = `Error: No se encontró la ciudad "${ciudadId}"`;
+          return;
+        }
+      }
+
+      // Enviar los IDs directamente, no los nombres
       const datosParaEnviar = {
-        producto: productoSeleccionado?.nombre || formValues.producto,
-        ciudad: ciudadSeleccionada?.nombre || formValues.ciudad,
+        producto: productoId,  // ID del producto
+        ciudad: ciudadId,      // ID de la ciudad
         fecha: formValues.fecha,
         precio: formValues.precio
       };
@@ -97,7 +115,10 @@ export class MarketPricesFormComponent implements OnInit {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       this.http.post(this.apiUrl, datosParaEnviar, { headers }).subscribe({
         next: () => this.mensaje = 'Registro guardado correctamente',
-        error: err => this.mensaje = err.error?.error || 'Error al guardar'
+        error: err => {
+          console.error('Error guardando precio:', err);
+          this.mensaje = err.error?.error || err.error?.details || 'Error al guardar';
+        }
       });
     }
   }
@@ -134,6 +155,7 @@ export class MarketPricesFormComponent implements OnInit {
     if (this.archivo) {
       const formData = new FormData();
       formData.append('file', this.archivo);
+
       const token = localStorage.getItem('token');
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       this.http.post(`${this.apiUrl}/upload`, formData, { headers }).subscribe({
