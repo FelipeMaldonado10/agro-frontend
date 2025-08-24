@@ -9,6 +9,11 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/" routerLinkActive="active" (click)="closeNavbar()">Inicio</a>
         </li>
+        <li class="nav-item" *ngIf="isLoggedIn" (click)="closeNavbar()">
+          <a class="nav-link market-prices-btn" routerLink="#" routerLinkActive="active">
+            <i class="fas fa-chart-line"></i> Precios de Mercado
+          </a>
+        </li>
         <li class="nav-item" *ngIf="isLoggedIn && !isAdmin && !isSuperadmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/parcelas" routerLinkActive="active">Mis Parcelas</a>
         </li>

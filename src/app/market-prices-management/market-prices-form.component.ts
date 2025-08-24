@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ProductoService } from '../producto-management/producto.service';
-import { Producto } from '../producto-management/producto.service';
-import { CiudadService } from '../ciudades/ciudad.service';
-import { environment } from '../../environments/environment';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
+import { environment } from '../../environments/environment';
+import { CiudadService } from '../ciudades/ciudad.service';
+import { Producto, ProductoService } from '../producto-management/producto.service';
 
 @Component({
   selector: 'app-market-prices-form',
@@ -69,9 +68,34 @@ export class MarketPricesFormComponent implements OnInit {
 
   guardarManual() {
     if (this.form.valid) {
+      const formValues = this.form.value;
+
+      // Debug: ver estructura de los datos
+      console.log('Form values:', formValues);
+      console.log('Productos array:', this.productos);
+      console.log('Ciudades array:', this.ciudades);
+
+      // Buscar por _id para productos y ciudades
+      const productoSeleccionado = this.productos.find(p => p._id === formValues.producto);
+      const ciudadSeleccionada = this.ciudades.find(c => c._id === formValues.ciudad);
+
+      // Debug: ver qué encontramos
+      console.log('Producto encontrado:', productoSeleccionado);
+      console.log('Ciudad encontrada:', ciudadSeleccionada);
+
+      // Crear objeto con nombres reales
+      const datosParaEnviar = {
+        producto: productoSeleccionado?.nombre || formValues.producto,
+        ciudad: ciudadSeleccionada?.nombre || formValues.ciudad,
+        fecha: formValues.fecha,
+        precio: formValues.precio
+      };
+
+      console.log('Datos a enviar:', datosParaEnviar);
+
       const token = localStorage.getItem('token');
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      this.http.post(this.apiUrl, this.form.value, { headers }).subscribe({
+      this.http.post(this.apiUrl, datosParaEnviar, { headers }).subscribe({
         next: () => this.mensaje = 'Registro guardado correctamente',
         error: err => this.mensaje = err.error?.error || 'Error al guardar'
       });
