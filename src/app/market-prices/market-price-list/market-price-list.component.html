@@ -38,7 +38,7 @@
                   <th>Ciudad</th>
                   <th>Precio</th>
                   <th>Fecha</th>
-                  <th>Acciones</th>
+                  <!-- <th>Acciones</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -55,15 +55,15 @@
                     {{ formatPrice(price.precio) }}
                   </td>
                   <td>{{ formatDate(price.fecha) }}</td>
-                  <td>
+                  <!-- <td>
                     <button
                       class="btn btn-success btn-sm detail-btn"
-                      (click)="viewDetail(price.id)"
+                      (click)="viewDetail(price._id)"
                       title="Ver detalle completo del precio">
                       <i class="fas fa-eye mr-1"></i>
                       Ver Detalle
                     </button>
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
             </table>

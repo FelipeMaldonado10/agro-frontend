@@ -48,19 +48,39 @@ export class MarketPriceListComponent implements OnInit {
     this.error = '';
 
     const token = localStorage.getItem('token');
+    if (!token) {
+      this.error = 'No hay sesión activa. Por favor inicia sesión para ver los precios de mercado.';
+      this.loading = false;
+      return;
+    }
+
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    // Get regular market prices data
     this.http.get<MarketPrice[]>(`${environment.apiUrl}/market-prices`, { headers }).subscribe({
       next: (data) => {
         console.log('Market prices raw data:', data);
         this.marketPrices = data;
-        this.enrichWithNames(); // Always call this to get the names
+        this.enrichWithNames();
       },
       error: (err) => {
-        this.error = 'No se pudieron cargar los precios de mercado.';
+        // Log completo para depuración
+        console.error('Error loading market prices (full):', err);
+        let errorMsg = 'No se pudieron cargar los precios de mercado.';
+        if (err && err.error) {
+          if (typeof err.error === 'string') {
+            errorMsg += `\n${err.error}`;
+          } else if (err.error.details) {
+            errorMsg += `\n${err.error.details}`;
+          } else if (err.error.message) {
+            errorMsg = `Error: ${err.error.message}`;
+          } else {
+            errorMsg += `\n${JSON.stringify(err.error)}`;
+          }
+        } else if (err && err.status === 401) {
+          errorMsg = 'Sesión expirada o no autorizada. Por favor inicia sesión nuevamente.';
+        }
+        this.error = errorMsg;
         this.loading = false;
-        console.error('Error loading market prices:', err);
       }
     });
   }
