@@ -4,7 +4,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ParcelaService } from '../parcelas/parcela.service';
+import { CultivoService } from '../cultivos/cultivo.service';
+import { AuthService } from '../auth/auth.service';
 import { environment } from '../../environments/environment';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-recomendaciones-form',
@@ -21,20 +24,47 @@ export class RecomendacionesFormComponent implements OnInit {
   mostrarTodas: boolean = true;
   cargando: boolean = false;
   Math = Math; // Para usar Math.abs en el template
+  
+  // Variables para el modal de cultivo
+  mostrarModalCultivo: boolean = false;
+  productoSeleccionado: any = null;
+  parcelaSeleccionada: any = null;
+  formCultivo: FormGroup;
+  creandoCultivo: boolean = false;
 
   constructor(
     private fb: FormBuilder, 
     private http: HttpClient, 
-    private parcelaService: ParcelaService
+    private parcelaService: ParcelaService,
+    private cultivoService: CultivoService,
+    private authService: AuthService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.form = this.fb.group({
       parcela: [''],
       fechaSiembra: [new Date().toISOString().split('T')[0], Validators.required]
     });
+
+    this.formCultivo = this.fb.group({
+      cantidad_sembrada: [1, [Validators.required, Validators.min(1)]],
+      area_sembrada: [1, [Validators.required, Validators.min(0.1)]],
+      unidad_area: ['m2', Validators.required],
+      fecha_siembra: [new Date().toISOString().split('T')[0], Validators.required]
+    });
   }
 
   ngOnInit() {
     this.cargarParcelas();
+    
+    // Verificar si hay un parámetro de parcela en la URL
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['parcela']) {
+        this.form.patchValue({
+          parcela: params['parcela']
+        });
+      }
+    });
   }
 
   private getHeaders() {
@@ -155,5 +185,119 @@ export class RecomendacionesFormComponent implements OnInit {
   // Método auxiliar para formatear fechas
   formatearFecha(fecha: string): string {
     return new Date(fecha).toLocaleDateString('es-ES');
+  }
+
+  // Abrir modal para sembrar producto recomendado
+  sembrarProducto(producto: any, parcela: any) {
+    console.log('Producto seleccionado:', producto);
+    console.log('Parcela seleccionada:', parcela);
+    
+    this.productoSeleccionado = producto;
+    this.parcelaSeleccionada = parcela;
+    this.mostrarModalCultivo = true;
+    
+    // Pre-llenar el formulario
+    this.formCultivo.patchValue({
+      fecha_siembra: this.form.value.fechaSiembra || new Date().toISOString().split('T')[0]
+    });
+  }
+
+  // Cerrar modal
+  cerrarModal() {
+    this.mostrarModalCultivo = false;
+    this.productoSeleccionado = null;
+    this.parcelaSeleccionada = null;
+    this.formCultivo.reset();
+    this.formCultivo.patchValue({
+      cantidad_sembrada: 1,
+      area_sembrada: 1,
+      unidad_area: 'm2',
+      fecha_siembra: new Date().toISOString().split('T')[0]
+    });
+  }
+
+  // Crear cultivo desde recomendación
+  crearCultivo() {
+    if (!this.formCultivo.valid || !this.productoSeleccionado || !this.parcelaSeleccionada) {
+      return;
+    }
+
+    // Verificar si el usuario está autenticado
+    if (!this.authService.isAuthenticated()) {
+      alert('Debes iniciar sesión para crear un cultivo');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.creandoCultivo = true;
+
+    // Determinar el ID del producto - basado en la estructura del backend
+    const productoId = this.productoSeleccionado.producto_id;
+
+    // Determinar el ID de la parcela - basado en la estructura del backend  
+    const parcelaId = this.parcelaSeleccionada.id;
+
+    const datosCultivo = {
+      parcelaId: parcelaId,
+      productoId: productoId,
+      cantidad_sembrada: this.formCultivo.value.cantidad_sembrada,
+      area_sembrada: this.formCultivo.value.area_sembrada,
+      unidad_area: this.formCultivo.value.unidad_area,
+      fecha_siembra: this.formCultivo.value.fecha_siembra,
+      datos_recomendacion: {
+        score_original: this.productoSeleccionado.score,
+        posicion_en_ranking: this.productoSeleccionado.posicion_ranking,
+        detalles_evaluacion: this.productoSeleccionado.detalles_evaluacion,
+        alertas: this.productoSeleccionado.alertas
+      }
+    };
+
+    console.log('Datos del cultivo a crear:', datosCultivo);
+    console.log('ProductoId extraído:', productoId);
+    console.log('ParcelaId extraído:', parcelaId);
+    console.log('Token disponible:', this.authService.getToken());
+
+    // Validar que tenemos los datos necesarios
+    if (!parcelaId || !productoId || !datosCultivo.cantidad_sembrada || !datosCultivo.area_sembrada) {
+      console.error('Faltan datos requeridos:', {
+        parcelaId,
+        productoId,
+        cantidad_sembrada: datosCultivo.cantidad_sembrada,
+        area_sembrada: datosCultivo.area_sembrada
+      });
+      alert('Faltan datos requeridos para crear el cultivo. Por favor revisa el formulario.');
+      this.creandoCultivo = false;
+      return;
+    }
+
+    this.cultivoService.crearCultivoDesdeRecomendacion(datosCultivo).subscribe({
+      next: (response) => {
+        console.log('Respuesta del servidor:', response);
+        if (response.success) {
+          this.cerrarModal();
+          alert('Cultivo creado exitosamente');
+          // Redirigir al detalle del cultivo creado
+          this.router.navigate(['/cultivos', response.data._id]);
+        }
+        this.creandoCultivo = false;
+      },
+      error: (error) => {
+        console.error('Error al crear cultivo:', error);
+        this.creandoCultivo = false;
+        if (error.status === 401) {
+          alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+          this.router.navigate(['/login']);
+        } else {
+          alert('Error al crear el cultivo: ' + (error.error?.message || error.message));
+        }
+      }
+    });
+  }
+
+  // Ir a ver todos los productos disponibles
+  verTodosLosProductos(parcela: any) {
+    this.router.navigate(['/cultivos/seleccionar-producto'], { 
+      queryParams: { parcelaId: parcela.id } 
+    });
   }
 }

@@ -15,8 +15,12 @@ import { ParcelaFormComponent } from './parcelas/parcela-form/parcela-form.compo
 import { ParcelaListComponent } from './parcelas/parcela-list/parcela-list.component';
 import { productoManagementRoutes } from './producto-management/producto-management.routes';
 import { recomendacionesRoutes } from './recomendaciones/recomendaciones.routes';
+
+import { cultivoRoutes } from './cultivos/cultivo.routes';
+
 import { UserFormComponent } from './user-management/user-form/user-form.component';
 import { UserListComponent } from './user-management/user-list/user-list.component';
+
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -38,7 +42,16 @@ export const routes: Routes = [
     ...marketPricesManagementRoutes,
     ...productoManagementRoutes,
     ...recomendacionesRoutes,
+
+    // Rutas de Cultivos
+    { 
+      path: 'cultivos', 
+      children: cultivoRoutes,
+      canActivate: [AuthGuard, ProductorGuard]
+    },
+
     { path: 'market-prices/:id', component: MarketPriceDetailComponent },
+
 
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: '**', redirectTo: '/dashboard' }

@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ParcelaService } from '../parcela.service';
+import { CultivoService } from '../../cultivos/cultivo.service';
 
 @Component({
   selector: 'app-parcela-list',
@@ -20,12 +21,22 @@ import { ParcelaService } from '../parcela.service';
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">{{ parcela.nombre }}</h4>
-
-
-
               <h6 class="card-subtitle mb-2 text-muted">{{ parcela.ciudad.nombre }}</h6>
               
-
+              <!-- Estado del cultivo -->
+              <div class="mt-2 mb-3">
+                <div class="alert alert-success" *ngIf="(cultivosPorParcela[parcela._id] || []).length > 0">
+                  <strong>Cultivos Activos:</strong>
+                  <ul class="mb-0 mt-1">
+                    <li *ngFor="let cultivo of cultivosPorParcela[parcela._id]">
+                      {{ cultivo.producto.nombre }} - {{ getEstadoTexto(cultivo.estado) }}
+                    </li>
+                  </ul>
+                </div>
+                <div class="alert alert-info" *ngIf="(cultivosPorParcela[parcela._id] || []).length === 0">
+                  Sin cultivos activos
+                </div>
+              </div>
 
               <div class="mt-3">
                 <h6>Datos Climáticos Actuales:</h6>
@@ -42,14 +53,33 @@ import { ParcelaService } from '../parcela.service';
                         [disabled]="actualizacionesEnCurso[parcela._id]">
                   {{ obtenerTextoBotonActualizar(parcela._id) }}
                 </button>
+                
                 <button class="btn btn-sm btn-primary me-2" 
                         [routerLink]="['/parcelas', parcela._id]">
                   Ver Detalles
                 </button>
-                <br>
+                
+                <!-- Botón para ver cultivos si tiene cultivos activos -->
+                <button class="btn btn-sm btn-success me-2" 
+                        *ngIf="(cultivosPorParcela[parcela._id] || []).length > 0"
+                        [routerLink]="['/cultivos']"
+                        [queryParams]="{parcela: parcela._id}">
+                  Ver Cultivos
+                </button>
+                
+                <!-- Botón para solicitar recomendaciones si no tiene cultivos activos -->
+                <button class="btn btn-sm btn-warning me-2" 
+                        *ngIf="(cultivosPorParcela[parcela._id] || []).length === 0"
+                        [routerLink]="['/recomendaciones']"
+                        [queryParams]="{parcela: parcela._id}">
+                  Solicitar Recomendación
+                </button>
+                
+                <br><br>
                 <button class="btn btn-sm btn-danger" 
-                        (click)="eliminarParcela(parcela._id)">
-                  Eliminar
+                        (click)="eliminarParcela(parcela._id)"
+                        [disabled]="(cultivosPorParcela[parcela._id] || []).length > 0">
+                  {{ (cultivosPorParcela[parcela._id] || []).length > 0 ? 'No se puede eliminar (tiene cultivos activos)' : 'Eliminar' }}
                 </button>
               </div>
             </div>
@@ -73,8 +103,12 @@ export class ParcelaListComponent implements OnInit, OnDestroy {
   actualizacionesEnCurso: { [key: string]: boolean } = {};
   tiemposRestantes: { [key: string]: number } = {};
   parcelas: any[] = [];
+  cultivosPorParcela: { [key: string]: any[] } = {};
 
-  constructor(private parcelaService: ParcelaService) {}
+  constructor(
+    private parcelaService: ParcelaService,
+    private cultivoService: CultivoService
+  ) {}
 
   ngOnInit() {
     this.cargarParcelas();
@@ -90,11 +124,61 @@ export class ParcelaListComponent implements OnInit, OnDestroy {
     this.parcelasSubscription = this.parcelaService.parcelas$.subscribe({
       next: (data) => {
         this.parcelas = data;
+        this.cargarCultivos();
       },
       error: (error) => {
         console.error('Error al cargar parcelas:', error);
       }
     });
+  }
+
+  cargarCultivos() {
+    this.parcelas.forEach(parcela => {
+      console.log(`Cargando cultivos para parcela: ${parcela._id} - ${parcela.nombre}`);
+      
+      this.cultivoService.getCultivosParcela(parcela._id).subscribe({
+        next: (response: any) => {
+          console.log(`Respuesta cultivos para ${parcela.nombre}:`, response);
+          
+          // Verificar si la respuesta tiene el formato correcto
+          let cultivos = [];
+          if (response && response.success && response.data) {
+            cultivos = response.data;
+          } else if (Array.isArray(response)) {
+            cultivos = response;
+          } else {
+            console.warn('Formato de respuesta inesperado:', response);
+          }
+          
+          // Filtrar cultivos activos con los estados correctos del backend
+          const cultivosActivos = cultivos.filter((c: any) => 
+            ['sembrado', 'en_crecimiento', 'listo_cosecha'].includes(c.estado)
+          );
+          
+          this.cultivosPorParcela[parcela._id] = cultivosActivos;
+          
+          console.log(`Cultivos activos para ${parcela.nombre}:`, cultivosActivos.length);
+          if (cultivosActivos.length > 0) {
+            console.log('Estados encontrados:', cultivosActivos.map((c: any) => c.estado));
+          }
+        },
+        error: (error: any) => {
+          console.error(`Error al cargar cultivos para ${parcela.nombre}:`, error);
+          this.cultivosPorParcela[parcela._id] = [];
+        }
+      });
+    });
+  }
+
+  getEstadoTexto(estado: string): string {
+    const estados: { [key: string]: string } = {
+      'sembrado': 'Sembrado',
+      'en_crecimiento': 'En Crecimiento',
+      'listo_cosecha': 'Listo para Cosecha',
+      'cosechado': 'Cosechado',
+      'finalizado': 'Finalizado'
+    };
+    return estados[estado] || estado;
   }
 
   actualizarClima(id: string) {
@@ -137,12 +221,20 @@ export class ParcelaListComponent implements OnInit, OnDestroy {
   }
 
   eliminarParcela(id: string) {
+    const cultivosActivos = this.cultivosPorParcela[id] || [];
+    
+    if (cultivosActivos.length > 0) {
+      alert('No se puede eliminar la parcela porque tiene cultivos activos.');
+      return;
+    }
+
     if (confirm('¿Está seguro de eliminar esta parcela?')) {
       this.parcelaService.eliminarParcela(id).subscribe({
         next: () => {
           this.parcelas = this.parcelas.filter(p => p._id !== id);
+          delete this.cultivosPorParcela[id];
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error al eliminar parcela:', error);
         }
       });
