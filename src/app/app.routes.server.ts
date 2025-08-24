@@ -24,6 +24,7 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'market-prices/:id',
+
     renderMode: RenderMode.Client
   },
   {
