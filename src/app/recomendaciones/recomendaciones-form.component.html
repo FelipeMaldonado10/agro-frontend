@@ -129,7 +129,7 @@
 
                 <!-- Evaluación detallada -->
                 <div *ngIf="opcion.detalles_evaluacion?.length" class="mt-2">
-                  <strong class="text-success">✅ Factores favorables:</strong>
+                  <strong class="text-success">✅ Factores a tener en cuenta:</strong>
                   <ul class="small mb-1">
                     <li *ngFor="let detalle of opcion.detalles_evaluacion" class="text-success">{{ detalle }}</li>
                   </ul>
@@ -145,7 +145,7 @@
 
                 <!-- Observaciones -->
                 <div *ngIf="opcion.observaciones" class="mt-2 small text-muted">
-                  <strong>💡 Observaciones:</strong> {{ opcion.observaciones }}
+                  <strong>💡 Observaciones de la parcela:</strong> {{ opcion.observaciones }}
                 </div>
 
                 <!-- Botón para sembrar -->

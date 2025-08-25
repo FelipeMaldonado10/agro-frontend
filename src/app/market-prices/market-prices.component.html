@@ -1,14 +1,14 @@
 <div class="market-prices-container">
-  <h2>Gestión de Precios Históricos</h2>
+  <h2>Gestión de Precios Históricos v2</h2>
   <form [formGroup]="form" (ngSubmit)="submitForm()" class="price-form">
     <select formControlName="producto" class="form-select" required>
       <option value="">Seleccione un producto</option>
       <option *ngFor="let producto of productos" [value]="producto._id">{{ producto.nombre }}</option>
     </select>
-    <select formControlName="ciudad" class="form-select" required>
+    <!-- <select formControlName="ciudad" class="form-select" required>
       <option value="">Seleccione una ciudad</option>
       <option *ngFor="let ciudad of ciudades" [value]="ciudad._id">{{ ciudad.nombre }}</option>
-    </select>
+    </select> -->
     <input formControlName="fecha" type="date" placeholder="Fecha" required>
     <button type="button" (click)="setToday()">Hoy</button>
     <input formControlName="precio" type="number" placeholder="Precio" required>
@@ -26,7 +26,6 @@
     <thead>
       <tr>
         <th>Producto</th>
-        <th>Ciudad</th>
         <th>Fecha</th>
         <th>Precio</th>
         <th>Acciones</th>
@@ -35,7 +34,6 @@
     <tbody>
       <tr *ngFor="let p of prices">
         <td>{{ p.nombreProducto || 'Producto no encontrado' }}</td>
-        <td>{{ p.nombreCiudad || 'Ciudad no encontrada' }}</td>
         <td>{{ p.fecha }}</td>
         <td>{{ p.precio }}</td>
         <td><button (click)="deletePrice(p._id)">Eliminar</button></td>

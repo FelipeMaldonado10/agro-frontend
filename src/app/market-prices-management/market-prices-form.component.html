@@ -8,13 +8,6 @@
     </select>
   </div>
   <div class="mb-2">
-    <label>Ciudad</label>
-    <select formControlName="ciudad" class="form-control" required>
-      <option value="">Seleccione una ciudad</option>
-      <option *ngFor="let ciudad of ciudades" [value]="ciudad._id">{{ ciudad.nombre }}</option>
-    </select>
-  </div>
-  <div class="mb-2">
     <label>Fecha</label>
     <input formControlName="fecha" type="date" class="form-control" />
   </div>
@@ -33,5 +26,5 @@
     <button class="btn btn-primary" (click)="subirArchivo()" [disabled]="!archivo">Subir archivo</button>
     <button type="button" class="btn btn-info" (click)="downloadTemplate()">Descargar Plantilla</button>
   </div>
-</div>
+
 <div class="mt-2 text-success">{{ mensaje }}</div>
