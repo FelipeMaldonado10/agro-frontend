@@ -32,6 +32,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
+    path:'recomendaciones',
+    renderMode: RenderMode.Client
+  },
+  {
     path: 'cultivos/:id',
     renderMode: RenderMode.Client
   },
