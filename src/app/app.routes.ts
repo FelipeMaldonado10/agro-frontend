@@ -44,7 +44,13 @@ export const routes: Routes = [
     ...marketPricesManagementRoutes,
     ...productoManagementRoutes,
     ...recomendacionesRoutes,
-    ...cultivoRoutes,
+
+    // Rutas de Cultivos
+    { 
+      path: 'cultivos', 
+      children: cultivoRoutes,
+      canActivate: [AuthGuard, ProductorGuard]
+    },
 
     { path: 'market-prices/:id', component: MarketPriceDetailComponent },
 
