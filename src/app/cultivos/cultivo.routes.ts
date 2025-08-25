@@ -8,22 +8,22 @@ import { SeleccionarProductoComponent } from './seleccionar-producto/seleccionar
 
 export const cultivoRoutes: Routes = [
   {
-    path: '',
+    path: 'cultivos',
     component: CultivoListComponent,
     canActivate: [AuthGuard, ProductorGuard]
   },
   {
-    path: 'seleccionar-producto',
+    path: 'cultivos/seleccionar-producto',
     component: SeleccionarProductoComponent,
     canActivate: [AuthGuard, ProductorGuard]
   },
   {
-    path: ':id',
+    path: 'cultivos/:id',
     component: CultivoDetailComponent,
     canActivate: [AuthGuard, ProductorGuard]
   },
   {
-    path: ':id/cosecha',
+    path: 'cultivos/:id/cosecha',
     component: RegistrarCosechaComponent,
     canActivate: [AuthGuard, ProductorGuard]
   }
