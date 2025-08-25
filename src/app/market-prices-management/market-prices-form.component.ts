@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { environment } from '../../environments/environment';
-import { CiudadService } from '../ciudades/ciudad.service';
 import { Producto, ProductoService } from '../producto-management/producto.service';
 
 @Component({
@@ -19,19 +18,16 @@ export class MarketPricesFormComponent implements OnInit {
   mensaje: string = '';
   archivo: File | null = null;
   productos: Producto[] = [];
-  ciudades: any[] = [];
 
   private apiUrl = `${environment.apiUrl}/market-prices`;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private productoService: ProductoService,
-    private ciudadService: CiudadService
+    private productoService: ProductoService
   ) {
     this.form = this.fb.group({
       producto: ['', Validators.required],
-      ciudad: ['', Validators.required],
       fecha: ['', Validators.required],
       precio: ['', Validators.required]
     });
@@ -39,7 +35,6 @@ export class MarketPricesFormComponent implements OnInit {
 
   ngOnInit() {
     this.cargarProductos();
-    this.cargarCiudades();
   }
 
   cargarProductos() {
@@ -54,18 +49,6 @@ export class MarketPricesFormComponent implements OnInit {
     });
   }
 
-  cargarCiudades() {
-    this.ciudadService.obtenerCiudades().subscribe({
-      next: (ciudades) => {
-        this.ciudades = ciudades;
-      },
-      error: (error) => {
-        console.error('Error al cargar ciudades:', error);
-        this.mensaje = 'Error al cargar ciudades';
-      }
-    });
-  }
-
   guardarManual() {
     if (this.form.valid) {
       const formValues = this.form.value;
@@ -73,11 +56,9 @@ export class MarketPricesFormComponent implements OnInit {
       // Debug: ver estructura de los datos
       console.log('Form values:', formValues);
       console.log('Productos array:', this.productos);
-      console.log('Ciudades array:', this.ciudades);
 
-      // Asegurarse que producto y ciudad son IDs válidos
+      // Asegurarse que producto es un ID válido
       let productoId = formValues.producto;
-      let ciudadId = formValues.ciudad;
 
       // Si el producto no es un ID válido (24 caracteres hexadecimales), busca el ID por nombre
       if (typeof productoId === 'string' && !productoId.match(/^[0-9a-fA-F]{24}$/)) {
@@ -90,21 +71,9 @@ export class MarketPricesFormComponent implements OnInit {
         }
       }
 
-      // Si la ciudad no es un ID válido (24 caracteres hexadecimales), busca el ID por nombre
-      if (typeof ciudadId === 'string' && !ciudadId.match(/^[0-9a-fA-F]{24}$/)) {
-        const ciudad = this.ciudades.find(c => c.nombre.toLowerCase() === ciudadId.toLowerCase());
-        if (ciudad) {
-          ciudadId = ciudad._id;
-        } else {
-          this.mensaje = `Error: No se encontró la ciudad "${ciudadId}"`;
-          return;
-        }
-      }
-
       // Enviar los IDs directamente, no los nombres
       const datosParaEnviar = {
         producto: productoId,  // ID del producto
-        ciudad: ciudadId,      // ID de la ciudad
         fecha: formValues.fecha,
         precio: formValues.precio
       };
@@ -140,8 +109,7 @@ export class MarketPricesFormComponent implements OnInit {
       {
         producto: 'Nombre del Producto',
         fecha: 'YYYY-MM-DD',
-        precio: 'Precio en números',
-        ciudad: 'Nombre de la Ciudad'
+        precio: 'Precio en números'
       }
     ];
 
@@ -165,3 +133,4 @@ export class MarketPricesFormComponent implements OnInit {
     }
   }
 }
+
