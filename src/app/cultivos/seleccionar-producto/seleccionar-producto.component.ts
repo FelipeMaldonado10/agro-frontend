@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ParcelaService } from '../../parcelas/parcela.service';
@@ -253,21 +253,29 @@ import { CultivoService, Producto } from '../cultivo.service';
                 </div>
               </div>
 
-              <!-- Estimaciones automáticas -->
+              <!-- Estimaciones automáticas en tiempo real -->
               <div class="mt-4 p-4 bg-blue-50 rounded-lg">
                 <h4 class="font-semibold text-blue-800 mb-2">📊 Estimaciones Automáticas</h4>
-                <p class="text-sm text-blue-700">
-                  Una vez creado el cultivo, el sistema calculará automáticamente:
-                </p>
-                <ul class="text-sm text-blue-700 mt-2 list-disc list-inside">
-                  <li>Cantidad estimada de producción</li>
-                  <li>Ingresos proyectados basados en precios históricos</li>
-                  <li>Fecha estimada de cosecha</li>
-                  <li>Rendimiento esperado por área</li>
-                </ul>
+                <ng-container *ngIf="estimacionesLoading">
+                  <p class="text-blue-700 flex items-center"><span class="animate-spin mr-2">🔄</span>Calculando estimaciones...</p>
+                </ng-container>
+                <ng-container *ngIf="!estimacionesLoading && estimacionesError">
+                  <p class="text-red-700 flex items-center"><span class="mr-2">❌</span>Error al calcular las predicciones. Intenta de nuevo.</p>
+                </ng-container>
+                <ng-container *ngIf="!estimacionesLoading && !estimacionesError && estimaciones">
+                  <ul class="text-sm text-blue-700 mt-2 list-disc list-inside">
+                    <li *ngIf="estimaciones.cantidad_estimada !== undefined">Cantidad estimada de producción: <b>{{ estimaciones.cantidad_estimada }}</b></li>
+                    <li *ngIf="estimaciones.ingresos_estimados !== undefined">Ingresos proyectados: <b>{{ estimaciones.ingresos_estimados | currency:'COP':'symbol-narrow' }}</b></li>
+                    <li *ngIf="estimaciones.fecha_cosecha_estimada">Fecha estimada de cosecha: <b>{{ estimaciones.fecha_cosecha_estimada | date:'longDate' }}</b></li>
+                    <li *ngIf="estimaciones.rendimiento_por_area !== undefined">Rendimiento esperado por área: <b>{{ estimaciones.rendimiento_por_area }}</b></li>
+                  </ul>
+                </ng-container>
+                <ng-container *ngIf="!estimacionesLoading && !estimacionesError && !estimaciones">
+                  <p class="text-sm text-blue-700">Completa los datos para ver las estimaciones automáticas.</p>
+                </ng-container>
               </div>
-            </form>
-          </div>
+    </form>
+  </div>
 
           <div class="p-6 border-t border-gray-200 flex gap-3">
             <button
@@ -309,7 +317,16 @@ import { CultivoService, Producto } from '../cultivo.service';
     }
   `]
 })
-export class SeleccionarProductoComponent implements OnInit {
+export class SeleccionarProductoComponent implements OnInit, OnDestroy {
+  estimaciones: any = null;
+  estimacionesLoading = false;
+  estimacionesError = false;
+  private formValueChangesSub: any;
+  ngOnDestroy() {
+    if (this.formValueChangesSub) {
+      this.formValueChangesSub.unsubscribe();
+    }
+  }
   productos: Producto[] = [];
   productosFiltrados: Producto[] = [];
   loading = true;
@@ -514,9 +531,50 @@ export class SeleccionarProductoComponent implements OnInit {
 
     this.productoSeleccionado = producto;
     this.mostrarModal = true;
+    this.estimaciones = null;
+    setTimeout(() => this.calcularEstimaciones(), 0);
+
+    // Evitar múltiples suscripciones
+    if (this.formValueChangesSub) {
+      this.formValueChangesSub.unsubscribe();
+    }
+    this.formValueChangesSub = this.formCultivo.valueChanges.subscribe(() => {
+      this.calcularEstimaciones();
+    });
 
     console.log('Modal estado:', this.mostrarModal);
     console.log('Producto seleccionado:', this.productoSeleccionado);
+  }
+
+  // Llama al endpoint de estimaciones y actualiza el estado
+  calcularEstimaciones() {
+    if (!this.productoSeleccionado || !this.formCultivo.valid || !this.parcelaInfo) {
+      this.estimaciones = null;
+      this.estimacionesError = false;
+      return;
+    }
+    this.estimacionesLoading = true;
+    this.estimacionesError = false;
+    const datos = {
+      productoId: this.productoSeleccionado._id,
+      ciudadNombre: this.parcelaInfo.ciudad?.nombre,
+      cantidadSembrada: this.formCultivo.value.cantidad_sembrada,
+      areaSembrada: this.formCultivo.value.area_sembrada,
+      unidadArea: this.formCultivo.value.unidad_area,
+      fechaSiembra: this.formCultivo.value.fecha_siembra
+    };
+    this.cultivoService.calcularEstimaciones(datos).subscribe({
+      next: (resp) => {
+        this.estimaciones = resp?.estimaciones || null;
+        this.estimacionesLoading = false;
+        this.estimacionesError = false;
+      },
+      error: (err) => {
+        this.estimaciones = null;
+        this.estimacionesLoading = false;
+        this.estimacionesError = true;
+      }
+    });
   }
 
   testClick(nombreProducto: string) {
