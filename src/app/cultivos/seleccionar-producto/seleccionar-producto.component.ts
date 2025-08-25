@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CultivoService, Producto } from '../cultivo.service';
 import { ParcelaService } from '../../parcelas/parcela.service';
+import { CultivoService, Producto } from '../cultivo.service';
 
 @Component({
   selector: 'app-seleccionar-producto',
@@ -20,12 +20,12 @@ import { ParcelaService } from '../../parcelas/parcela.service';
             </p>
           </div>
           <div class="flex gap-2">
-            <button 
+            <button
               class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
               [routerLink]="['/recomendaciones']">
               ← Volver a Recomendaciones
             </button>
-            <button 
+            <button
               class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               [routerLink]="['/cultivos']">
               Ver Mis Cultivos
@@ -38,7 +38,7 @@ import { ParcelaService } from '../../parcelas/parcela.service';
       <div class="bg-white rounded-lg shadow-md p-6 mb-6" *ngIf="!parcelaId || !parcelaInfo">
         <h2 class="text-xl font-semibold text-gray-800 mb-4">Selecciona una Parcela</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div *ngFor="let parcela of parcelas" 
+          <div *ngFor="let parcela of parcelas"
                class="border rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition-colors"
                [class.border-green-500]="parcelaId === parcela._id"
                [class.bg-green-50]="parcelaId === parcela._id"
@@ -50,7 +50,7 @@ import { ParcelaService } from '../../parcelas/parcela.service';
         </div>
         <div *ngIf="parcelas.length === 0" class="text-center py-8">
           <p class="text-gray-500 mb-4">No tienes parcelas registradas</p>
-          <button 
+          <button
             class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             [routerLink]="['/parcelas/crear']">
             Crear Nueva Parcela
@@ -70,8 +70,8 @@ import { ParcelaService } from '../../parcelas/parcela.service';
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Buscar por nombre</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                 [(ngModel)]="filtroNombre"
                 placeholder="Nombre del producto..."
@@ -79,7 +79,7 @@ import { ParcelaService } from '../../parcelas/parcela.service';
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Temporada</label>
-              <select 
+              <select
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                 [(ngModel)]="filtroTemporada"
                 (change)="filtrarProductos()">
@@ -89,7 +89,7 @@ import { ParcelaService } from '../../parcelas/parcela.service';
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Tiempo de cosecha</label>
-              <select 
+              <select
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                 [(ngModel)]="filtroTiempoCosecha"
                 (change)="filtrarProductos()">
@@ -104,13 +104,13 @@ import { ParcelaService } from '../../parcelas/parcela.service';
 
         <!-- Lista de productos -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div *ngFor="let producto of productosFiltrados" 
+          <div *ngFor="let producto of productosFiltrados"
                class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
-            
+
             <div class="p-6">
               <div class="flex justify-between items-start mb-4">
                 <h3 class="text-xl font-semibold text-gray-900">{{ producto.nombre }}</h3>
-                <span *ngIf="producto.temporada" 
+                <span *ngIf="producto.temporada"
                       class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
                   {{ producto.temporada }}
                 </span>
@@ -144,20 +144,20 @@ import { ParcelaService } from '../../parcelas/parcela.service';
                 </div>
               </div>
 
-              <button 
+              <button
                 class="w-full mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                 (click)="seleccionarProducto(producto)"
                 type="button">
                 🌱 Cultivar: {{producto.nombre}}
               </button>
-              
+
               <!-- Botón de prueba adicional -->
-              <button 
+              <!-- <button
                 class="w-full mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 (click)="testClick(producto.nombre)"
                 type="button">
                 🧪 Test Click
-              </button>
+              </button> -->
             </div>
           </div>
         </div>
@@ -166,7 +166,7 @@ import { ParcelaService } from '../../parcelas/parcela.service';
           <div class="text-gray-400 text-6xl mb-4">🔍</div>
           <h3 class="text-xl font-semibold text-gray-700 mb-2">No se encontraron productos</h3>
           <p class="text-gray-500">Intenta ajustar los filtros de búsqueda.</p>
-          <button 
+          <button
             class="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             (click)="limpiarFiltros()">
             Limpiar Filtros
@@ -185,13 +185,13 @@ import { ParcelaService } from '../../parcelas/parcela.service';
           <div class="p-6">
             <form [formGroup]="formCultivo">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
+
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">
                     Cantidad a sembrar *
                   </label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                     formControlName="cantidad_sembrada"
                     min="1"
@@ -204,13 +204,13 @@ import { ParcelaService } from '../../parcelas/parcela.service';
                     Área de siembra *
                   </label>
                   <div class="flex gap-2">
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                       formControlName="area_sembrada"
                       min="0.1"
                       step="0.1">
-                    <select 
+                    <select
                       class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                       formControlName="unidad_area">
                       <option value="m2">m²</option>
@@ -223,8 +223,8 @@ import { ParcelaService } from '../../parcelas/parcela.service';
                   <label class="block text-sm font-medium text-gray-700 mb-2">
                     Fecha de siembra
                   </label>
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                     formControlName="fecha_siembra">
                 </div>
@@ -270,14 +270,14 @@ import { ParcelaService } from '../../parcelas/parcela.service';
           </div>
 
           <div class="p-6 border-t border-gray-200 flex gap-3">
-            <button 
+            <button
               type="button"
               class="flex-1 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
               (click)="cerrarModal()"
               [disabled]="creandoCultivo">
               Cancelar
             </button>
-            <button 
+            <button
               type="button"
               class="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               (click)="crearCultivoManual()"
@@ -313,7 +313,7 @@ export class SeleccionarProductoComponent implements OnInit {
   productos: Producto[] = [];
   productosFiltrados: Producto[] = [];
   loading = true;
-  
+
   // Filtros
   filtroNombre = '';
   filtroTemporada = '';
@@ -350,10 +350,10 @@ export class SeleccionarProductoComponent implements OnInit {
 
   ngOnInit() {
     console.log('SeleccionarProductoComponent iniciado');
-    
+
     // Cargar parcelas del usuario
     this.cargarParcelas();
-    
+
     // Obtener parámetros de la URL
     this.route.queryParams.subscribe(params => {
       console.log('Parámetros de la URL:', params);
@@ -416,7 +416,7 @@ export class SeleccionarProductoComponent implements OnInit {
         console.error('Status del error:', error.status);
         console.error('Mensaje del error:', error.message);
         console.error('Respuesta completa del error:', error.error);
-        
+
         // Si es error 400 o 404, la parcela no existe o no pertenece al usuario
         if (error.status === 400 || error.status === 404) {
           alert(`Error: La parcela no existe o no tienes acceso a ella.\nID: ${this.parcelaId}\nPor favor, selecciona una parcela válida.`);
@@ -428,11 +428,11 @@ export class SeleccionarProductoComponent implements OnInit {
   cargarProductos() {
     this.loading = true;
     console.log('Iniciando carga de productos...');
-    
+
     this.cultivoService.getProductosDisponibles().subscribe({
       next: (response) => {
         console.log('Respuesta del servidor para productos:', response);
-        
+
         if (response.success) {
           this.productos = response.data;
           this.productosFiltrados = [...this.productos];
@@ -468,11 +468,11 @@ export class SeleccionarProductoComponent implements OnInit {
   filtrarProductos() {
     this.productosFiltrados = this.productos.filter(producto => {
       // Filtro por nombre
-      const coincideNombre = this.filtroNombre === '' || 
+      const coincideNombre = this.filtroNombre === '' ||
         producto.nombre.toLowerCase().includes(this.filtroNombre.toLowerCase());
 
       // Filtro por temporada
-      const coincideTemporada = this.filtroTemporada === '' || 
+      const coincideTemporada = this.filtroTemporada === '' ||
         producto.temporada === this.filtroTemporada;
 
       // Filtro por tiempo de cosecha
@@ -508,13 +508,13 @@ export class SeleccionarProductoComponent implements OnInit {
     console.log('Producto:', producto);
     console.log('Producto ID:', producto._id);
     console.log('Parcela ID:', this.parcelaId);
-    
+
     // Alert para confirmar que se ejecuta
-    alert(`Seleccionando producto: ${producto.nombre}\nID: ${producto._id}\nParcela: ${this.parcelaId}`);
-    
+    alert(`Seleccionando ${producto.nombre}\nDeslize hasta el fondo de la pagina para continuar.`);
+
     this.productoSeleccionado = producto;
     this.mostrarModal = true;
-    
+
     console.log('Modal estado:', this.mostrarModal);
     console.log('Producto seleccionado:', this.productoSeleccionado);
   }
@@ -541,7 +541,7 @@ export class SeleccionarProductoComponent implements OnInit {
     console.log('Formulario válido:', this.formCultivo.valid);
     console.log('Producto seleccionado:', this.productoSeleccionado);
     console.log('Parcela ID:', this.parcelaId);
-    
+
     if (!this.formCultivo.valid || !this.productoSeleccionado) {
       console.log('Validación fallida - formulario inválido o producto no seleccionado');
       return;
