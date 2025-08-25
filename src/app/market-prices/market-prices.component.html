@@ -26,7 +26,6 @@
     <thead>
       <tr>
         <th>Producto</th>
-        <th>Ciudad</th>
         <th>Fecha</th>
         <th>Precio</th>
         <th>Acciones</th>
@@ -35,7 +34,6 @@
     <tbody>
       <tr *ngFor="let p of prices">
         <td>{{ p.nombreProducto || 'Producto no encontrado' }}</td>
-        <td>{{ p.nombreCiudad || 'Ciudad no encontrada' }}</td>
         <td>{{ p.fecha }}</td>
         <td>{{ p.precio }}</td>
         <td><button (click)="deletePrice(p._id)">Eliminar</button></td>
