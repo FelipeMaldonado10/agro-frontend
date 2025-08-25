@@ -1,13 +1,13 @@
 
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ParcelaService } from '../parcelas/parcela.service';
-import { CultivoService } from '../cultivos/cultivo.service';
-import { AuthService } from '../auth/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+import { CultivoService } from '../cultivos/cultivo.service';
+import { ParcelaService } from '../parcelas/parcela.service';
 
 @Component({
   selector: 'app-recomendaciones-form',
@@ -16,7 +16,51 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './recomendaciones-form.component.html',
   styleUrls: ['./recomendaciones-form.component.css']
 })
-export class RecomendacionesFormComponent implements OnInit {
+export class RecomendacionesFormComponent implements OnInit, AfterViewInit {
+  estimaciones: any = null;
+  estimacionesLoading = false;
+  estimacionesError = false;
+  ngAfterViewInit() {
+    // Suscribirse a cambios del formulario del modal para recalcular estimaciones
+    this.formCultivo.valueChanges.subscribe(() => {
+      this.calcularEstimaciones();
+    });
+  }
+
+  calcularEstimaciones() {
+    if (!this.productoSeleccionado || !this.formCultivo.valid || !this.parcelaSeleccionada) {
+      console.log('[Predicción] Formulario incompleto o sin selección de producto/parcela. No se calculan estimaciones.');
+      this.estimaciones = null;
+      this.estimacionesError = false;
+      return;
+    }
+    this.estimacionesLoading = true;
+    this.estimacionesError = false;
+    const datos = {
+      productoId: this.productoSeleccionado.producto_id,
+      ciudadNombre: this.parcelaSeleccionada.ciudad,
+      cantidadSembrada: this.formCultivo.value.cantidad_sembrada,
+      areaSembrada: this.formCultivo.value.area_sembrada,
+      unidadArea: this.formCultivo.value.unidad_area,
+      fechaSiembra: this.formCultivo.value.fecha_siembra
+    };
+    console.log('[Predicción] Solicitando estimaciones al backend con:', datos);
+    this.cultivoService.calcularEstimaciones(datos).subscribe({
+      next: (resp) => {
+        this.estimaciones = resp?.estimaciones || null;
+        this.estimacionesLoading = false;
+        this.estimacionesError = false;
+        console.log('[Predicción] Estimaciones recibidas:', this.estimaciones);
+      },
+      error: (err) => {
+        this.estimaciones = null;
+        this.estimacionesLoading = false;
+        this.estimacionesError = true;
+        console.error('[Predicción] Error al calcular estimaciones:', err);
+      }
+    });
+    console.log('[Predicción] Esperando respuesta del backend...');
+  }
   form: FormGroup;
   resultado: any = null;
   mensaje: string = '';
@@ -24,7 +68,7 @@ export class RecomendacionesFormComponent implements OnInit {
   mostrarTodas: boolean = true;
   cargando: boolean = false;
   Math = Math; // Para usar Math.abs en el template
-  
+
   // Variables para el modal de cultivo
   mostrarModalCultivo: boolean = false;
   productoSeleccionado: any = null;
@@ -33,8 +77,8 @@ export class RecomendacionesFormComponent implements OnInit {
   creandoCultivo: boolean = false;
 
   constructor(
-    private fb: FormBuilder, 
-    private http: HttpClient, 
+    private fb: FormBuilder,
+    private http: HttpClient,
     private parcelaService: ParcelaService,
     private cultivoService: CultivoService,
     private authService: AuthService,
@@ -56,7 +100,7 @@ export class RecomendacionesFormComponent implements OnInit {
 
   ngOnInit() {
     this.cargarParcelas();
-    
+
     // Verificar si hay un parámetro de parcela en la URL
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['parcela']) {
@@ -108,7 +152,7 @@ export class RecomendacionesFormComponent implements OnInit {
     this.resultado = null;
 
     const fechaSiembra = this.form.value.fechaSiembra || new Date().toISOString().split('T')[0];
-    
+
     const payload = {
       fecha_siembra: fechaSiembra
     };
@@ -148,7 +192,7 @@ export class RecomendacionesFormComponent implements OnInit {
 
     const parcelaId = this.form.value.parcela;
     const fechaSiembra = this.form.value.fechaSiembra || new Date().toISOString().split('T')[0];
-    
+
     const payload = {
       parcela_id: parcelaId,
       fecha_siembra: fechaSiembra
@@ -191,15 +235,17 @@ export class RecomendacionesFormComponent implements OnInit {
   sembrarProducto(producto: any, parcela: any) {
     console.log('Producto seleccionado:', producto);
     console.log('Parcela seleccionada:', parcela);
-    
     this.productoSeleccionado = producto;
     this.parcelaSeleccionada = parcela;
     this.mostrarModalCultivo = true;
-    
+    this.estimaciones = null;
+    this.estimacionesError = false;
+    this.estimacionesLoading = false;
     // Pre-llenar el formulario
     this.formCultivo.patchValue({
       fecha_siembra: this.form.value.fechaSiembra || new Date().toISOString().split('T')[0]
     });
+    setTimeout(() => this.calcularEstimaciones(), 0);
   }
 
   // Cerrar modal
@@ -234,7 +280,7 @@ export class RecomendacionesFormComponent implements OnInit {
     // Determinar el ID del producto - basado en la estructura del backend
     const productoId = this.productoSeleccionado.producto_id;
 
-    // Determinar el ID de la parcela - basado en la estructura del backend  
+    // Determinar el ID de la parcela - basado en la estructura del backend
     const parcelaId = this.parcelaSeleccionada.id;
 
     const datosCultivo = {
@@ -296,8 +342,8 @@ export class RecomendacionesFormComponent implements OnInit {
 
   // Ir a ver todos los productos disponibles
   verTodosLosProductos(parcela: any) {
-    this.router.navigate(['/cultivos/seleccionar-producto'], { 
-      queryParams: { parcelaId: parcela.id } 
+    this.router.navigate(['/cultivos/seleccionar-producto'], {
+      queryParams: { parcelaId: parcela.id }
     });
   }
 }

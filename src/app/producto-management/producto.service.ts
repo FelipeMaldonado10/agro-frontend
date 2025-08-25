@@ -11,6 +11,7 @@ export interface Producto {
   temperatura_optima: number;
   temporada: string;
   tiempo_cosecha: number;
+  rendimiento_estimado: number;
   caracteristicas: {
     sensibilidad_lluvia: string;
     sensibilidad_temperatura: string;
@@ -60,7 +61,9 @@ export class ProductoService {
   }
 
   crearProducto(producto: Omit<Producto, '_id'>): Observable<Producto> {
-    return this.http.post<Producto>(this.apiUrl, producto, this.getHeaders()).pipe(
+    // Asegurarse de que el campo rendimiento_estimado se envía como número
+    const payload = { ...producto, rendimiento_estimado: Number(producto.rendimiento_estimado) };
+    return this.http.post<Producto>(this.apiUrl, payload, this.getHeaders()).pipe(
       tap(nuevoProducto => {
         const productos = this.productosSubject.value;
         this.productosSubject.next([...productos, nuevoProducto]);

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductoService } from './producto.service';
 
@@ -36,10 +36,14 @@ import { ProductoService } from './producto.service';
           <label class="form-label">Tiempo de Cosecha (días)</label>
           <input type="number" class="form-control" formControlName="tiempo_cosecha">
         </div>
+        <div class="mb-3">
+          <label class="form-label">Rendimiento estimado (kg/m²)</label>
+          <input type="number" class="form-control" formControlName="rendimiento_estimado" step="any" min="0">
+        </div>
 
         <div formGroupName="caracteristicas">
           <h4 class="mt-4 mb-3">Características</h4>
-          
+
           <div class="mb-3">
             <label for="sens_lluvia" class="form-label">Sensibilidad a la Lluvia</label>
             <select class="form-select" id="sens_lluvia" formControlName="sensibilidad_lluvia">
@@ -121,6 +125,7 @@ export class ProductoFormComponent {
       temperatura_optima: ['', Validators.required],
       temporada: ['', Validators.required],
       tiempo_cosecha: ['', Validators.required],
+      rendimiento_estimado: ['', Validators.required],
       caracteristicas: this.fb.group({
         sensibilidad_lluvia: [''],
         sensibilidad_temperatura: [''],

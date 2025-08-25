@@ -8,8 +8,8 @@
       <!-- Menú horizontal (solo escritorio) -->
       <ul class="navbar-nav" *ngIf="!isMobileView">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active" (click)="closeNavbar()">Inicio</a>
-        <li class="nav-item" *ngIf="isLoggedIn && !isAdmin && !isSuperadmin" (click)="closeNavbar()">
+          <a class="nav-link" routerLink="/cultivos" routerLinkActive="active" (click)="closeNavbar()">Inicio</a>
+        <li class="nav-item" *ngIf="isLoggedIn" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/parcelas" routerLinkActive="active">Mis Parcelas</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn" (click)="closeNavbar()">

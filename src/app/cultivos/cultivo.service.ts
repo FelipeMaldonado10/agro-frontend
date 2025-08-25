@@ -1,7 +1,32 @@
+
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+
+export interface Cultivo {
+  _id: string;
+  parcela: {
+    _id: string;
+    nombre: string;
+    ciudad: {
+      nombre: string;
+    };
+  };
+  producto: {
+    _id: string;
+    nombre: string;
+    caracteristicas?: string;
+    tiempo_cosecha?: number;
+  };
+  usuario: {
+    _id: string;
+    nombre: string;
+    email: string;
+  };
+}
+
+
 
 export interface Cultivo {
   _id: string;
@@ -160,6 +185,17 @@ export class CultivoService {
   private apiUrl = `${environment.apiUrl}/cultivos`;
 
   constructor(private http: HttpClient) {}
+
+  // Calcular estimaciones para predicción en tiempo real
+  calcularEstimaciones(datos: any): Observable<any> {
+    // Obtener token del localStorage (o de AuthService si tienes uno)
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(`${this.apiUrl}/estimaciones`, datos, { headers });
+  }
 
   // Crear cultivo desde recomendación
   crearCultivoDesdeRecomendacion(datos: CrearCultivoRequest): Observable<any> {
