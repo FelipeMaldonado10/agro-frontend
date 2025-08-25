@@ -24,8 +24,10 @@ export class NavbarComponent {
 
   constructor(private auth: AuthService, private router: Router) {
     this.updateUser();
-    this.checkMobileView();
-    window.addEventListener('resize', this.debounce(this.checkMobileView.bind(this), 100));
+    if (typeof window !== 'undefined') {
+      this.checkMobileView();
+      window.addEventListener('resize', this.debounce(this.checkMobileView.bind(this), 100));
+    }
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.updateUser();
@@ -42,10 +44,12 @@ export class NavbarComponent {
   }
 
   checkMobileView() {
-    const width = window.innerWidth;
-    this.isMobileView = width < 992;
-    if (!this.isMobileView) {
-      this.menuOpen = false; // Solo cerrar en escritorio
+    if (typeof window !== 'undefined') {
+      const width = window.innerWidth;
+      this.isMobileView = width < 992;
+      if (!this.isMobileView) {
+        this.menuOpen = false; // Solo cerrar en escritorio
+      }
     }
   }
 
