@@ -42,13 +42,7 @@ export const routes: Routes = [
     ...marketPricesManagementRoutes,
     ...productoManagementRoutes,
     ...recomendacionesRoutes,
-
-    // Rutas de Cultivos
-    { 
-      path: 'cultivos', 
-      children: cultivoRoutes,
-      canActivate: [AuthGuard, ProductorGuard]
-    },
+    ...cultivoRoutes,
 
     { path: 'market-prices/:id', component: MarketPriceDetailComponent },
 
