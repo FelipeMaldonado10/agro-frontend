@@ -32,7 +32,7 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
-    path: 'cultivos/editar/:id',
+    path: 'cultivos/:id',
     renderMode: RenderMode.Client
   },
   {
