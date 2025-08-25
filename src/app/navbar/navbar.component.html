@@ -61,18 +61,18 @@
     <!-- Menú desplegable (móvil) -->
     <div class="dropdown-menu" [ngClass]="{ 'show': menuOpen && isMobileView }">
       <ul class="dropdown-nav">
+        </li>
+        <li class="dropdown-item" *ngIf="!isLoggedIn && !isSuperadmin && !isAdmin">
+          <a routerLink="/register" routerLinkActive="active" (click)="closeNavbar()">Registro</a>
+        </li>
+        <li class="dropdown-item" *ngIf="!isLoggedIn && !isSuperadmin && !isAdmin">
+          <a routerLink="/login" routerLinkActive="active" (click)="closeNavbar()">Login</a>
+        </li>
         <li class="dropdown-item">
-          <a routerLink="/" routerLinkActive="active" (click)="closeNavbar()" aria-current="page">Inicio</a>
+          <a routerLink="/cultivos" routerLinkActive="active" (click)="closeNavbar()" aria-current="page">Inicio</a>
         </li>
         <li class="dropdown-item" *ngIf="isLoggedIn && !isAdmin && !isSuperadmin">
           <a routerLink="/parcelas" routerLinkActive="active" (click)="closeNavbar()">Mis Parcelas</a>
-        </li>
-        <li class="dropdown-item" *ngIf="!isLoggedIn && !isSuperadmin">
-          <a routerLink="/register" routerLinkActive="active" (click)="closeNavbar()">Registro</a>
-        </li>
-        <li class="dropdown-item" *ngIf="!isLoggedIn && !isSuperadmin">
-          <a routerLink="/login" routerLinkActive="active" (click)="closeNavbar()">Login</a>
-        </li>
         <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin">
           <a routerLink="/user-management" routerLinkActive="active" (click)="closeNavbar()">Gestión de Usuarios</a>
         </li>
