@@ -202,7 +202,7 @@
 
           <form [formGroup]="formCultivo">
             <div class="row">
-              <div class="col-md-6">
+              <!-- <div class="col-md-6">
                 <label class="form-label">Cantidad a sembrar *</label>
                 <input
                   type="number"
@@ -211,7 +211,7 @@
                   min="1"
                   step="1">
                 <small class="text-muted">Número de plantas, semillas o unidades</small>
-              </div>
+              </div> -->
 
               <div class="col-md-6">
                 <label class="form-label">Área de siembra *</label>
@@ -224,7 +224,7 @@
                     step="0.1">
                   <select class="form-select" formControlName="unidad_area" style="max-width: 100px;">
                     <option value="m2">m²</option>
-                    <option value="hectarea">hectárea</option>
+                    <!-- <option value="hectarea">hectárea</option> -->
                   </select>
                 </div>
               </div>
@@ -251,10 +251,12 @@
               </ng-container>
               <ng-container *ngIf="!estimacionesLoading && !estimacionesError && estimaciones">
                 <ul class="mb-0">
-                  <li *ngIf="estimaciones.cantidad_estimada !== undefined">Cantidad estimada de producción: <b>{{ estimaciones.cantidad_estimada }}</b></li>
+                  <li *ngIf="estimaciones.rendimiento_por_area !== undefined">Rendimiento por área: <b>{{ estimaciones.rendimiento_por_area }}</b></li>
+                  <li *ngIf="estimaciones.precio_estimado_por_unidad !== undefined">Precio estimado por unidad: <b>{{ estimaciones.precio_estimado_por_unidad | currency:'COP':'symbol-narrow' }}</b></li>
+                  <li *ngIf="estimaciones.cantidad_estimada !== undefined">Cantidad estimada de producción: <b>{{ estimaciones.cantidad_estimada }}kg</b></li>
                   <li *ngIf="estimaciones.ingresos_estimados !== undefined">Ingresos proyectados: <b>{{ estimaciones.ingresos_estimados | currency:'COP':'symbol-narrow' }}</b></li>
                   <li *ngIf="estimaciones.fecha_cosecha_estimada">Fecha estimada de cosecha: <b>{{ estimaciones.fecha_cosecha_estimada | date:'longDate' }}</b></li>
-                  <!-- <li *ngIf="estimaciones.rendimiento_por_area !== undefined">Rendimiento por área: <b>{{ estimaciones.rendimiento_por_area }}</b></li> -->
+
                 </ul>
               </ng-container>
               <ng-container *ngIf="!estimacionesLoading && !estimacionesError && !estimaciones">
