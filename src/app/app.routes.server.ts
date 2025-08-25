@@ -28,15 +28,11 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
-    path: ':id',
+    path:'productos/editar/:id',
     renderMode: RenderMode.Client
   },
   {
-    path: ':id/cosecha',
-    renderMode: RenderMode.Client
-  },
-  {
-    path: 'productos/editar/:id',
+    path: 'cultivos/editar/:id',
     renderMode: RenderMode.Client
   },
   {
