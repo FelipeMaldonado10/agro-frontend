@@ -5,10 +5,10 @@
       <option value="">Seleccione un producto</option>
       <option *ngFor="let producto of productos" [value]="producto._id">{{ producto.nombre }}</option>
     </select>
-    <select formControlName="ciudad" class="form-select" required>
+    <!-- <select formControlName="ciudad" class="form-select" required>
       <option value="">Seleccione una ciudad</option>
       <option *ngFor="let ciudad of ciudades" [value]="ciudad._id">{{ ciudad.nombre }}</option>
-    </select>
+    </select> -->
     <input formControlName="fecha" type="date" placeholder="Fecha" required>
     <button type="button" (click)="setToday()">Hoy</button>
     <input formControlName="precio" type="number" placeholder="Precio" required>

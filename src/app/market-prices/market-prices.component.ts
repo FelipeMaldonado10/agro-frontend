@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,7 +12,7 @@ import { Producto, ProductoService } from '../producto-management/producto.servi
   templateUrl: './market-prices.component.html',
   styleUrls: ['./market-prices.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePipe, CurrencyPipe]
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class MarketPricesComponent implements OnInit {
   prices: any[] = [];
@@ -95,7 +95,7 @@ export class MarketPricesComponent implements OnInit {
 
   submitForm() {
     if (this.form.invalid) return;
-    
+
     // Asegurarse de que los productos y ciudades estén cargados
     if (this.productos.length === 0 || this.ciudades.length === 0) {
       Promise.all([
@@ -112,16 +112,16 @@ export class MarketPricesComponent implements OnInit {
   private enviarFormulario() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    
+
     // Verificar que el producto y la ciudad existan antes de enviar
     const productoSeleccionado = this.productos.find(p => p._id === this.form.value.producto);
     const ciudadSeleccionada = this.ciudades.find(c => c._id === this.form.value.ciudad);
-    
+
     if (!productoSeleccionado || !ciudadSeleccionada) {
       console.error('Producto o ciudad no válidos');
       return;
     }
-    
+
     this.http.post(this.apiUrl, this.form.value, { headers }).subscribe({
       next: () => {
         this.form.reset();
@@ -160,7 +160,7 @@ export class MarketPricesComponent implements OnInit {
     console.log('PRODUCTOS DISPONIBLES (copiar y pegar el nombre exacto):');
     console.log('='.repeat(50));
     this.productos.forEach(p => console.log(p.nombre));
-    
+
     console.log('\n' + '='.repeat(50));
     console.log('CIUDADES DISPONIBLES (copiar y pegar el nombre exacto):');
     console.log('='.repeat(50));
@@ -168,7 +168,7 @@ export class MarketPricesComponent implements OnInit {
     console.log('='.repeat(50));
     console.log('IMPORTANTE: Usar los nombres EXACTOS como aparecen arriba');
     console.log('='.repeat(50));
-    
+
     const template = [
       {
         producto: '⚠️ IMPORTANTE: Copiar y pegar el nombre EXACTO del producto de la lista mostrada en la consola',
