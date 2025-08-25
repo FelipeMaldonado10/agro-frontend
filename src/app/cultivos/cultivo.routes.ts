@@ -13,17 +13,17 @@ export const cultivoRoutes: Routes = [
     canActivate: [AuthGuard, ProductorGuard]
   },
   {
-    path: 'seleccionar-producto',
+    path: 'cultivos/seleccionar-producto',
     component: SeleccionarProductoComponent,
     canActivate: [AuthGuard, ProductorGuard]
   },
   {
-    path: ':id',
+    path: 'cultivos/:id',
     component: CultivoDetailComponent,
     canActivate: [AuthGuard, ProductorGuard]
   },
   {
-    path: ':id/cosecha',
+    path: 'cultivos/:id/cosecha',
     component: RegistrarCosechaComponent,
     canActivate: [AuthGuard, ProductorGuard]
   }
