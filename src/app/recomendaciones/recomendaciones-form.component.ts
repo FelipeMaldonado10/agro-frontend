@@ -1,7 +1,8 @@
 
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../environments/environment';
@@ -20,11 +21,14 @@ export class RecomendacionesFormComponent implements OnInit, AfterViewInit {
   estimaciones: any = null;
   estimacionesLoading = false;
   estimacionesError = false;
+  isBrowser: boolean;
   ngAfterViewInit() {
-    // Suscribirse a cambios del formulario del modal para recalcular estimaciones
-    this.formCultivo.valueChanges.subscribe(() => {
-      this.calcularEstimaciones();
-    });
+    // Solo suscribirse si estamos en el navegador
+    if (this.isBrowser) {
+      this.formCultivo.valueChanges.subscribe(() => {
+        this.calcularEstimaciones();
+      });
+    }
   }
 
   calcularEstimaciones() {
@@ -83,8 +87,10 @@ export class RecomendacionesFormComponent implements OnInit, AfterViewInit {
     private cultivoService: CultivoService,
     private authService: AuthService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
     this.form = this.fb.group({
       parcela: [''],
       fechaSiembra: [new Date().toISOString().split('T')[0], Validators.required]
@@ -99,20 +105,24 @@ export class RecomendacionesFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.cargarParcelas();
-
-    // Verificar si hay un parámetro de parcela en la URL
-    this.activatedRoute.queryParams.subscribe(params => {
-      if (params['parcela']) {
-        this.form.patchValue({
-          parcela: params['parcela']
-        });
-      }
-    });
+    // Solo cargar parcelas y leer queryParams en el navegador
+    if (this.isBrowser) {
+      this.cargarParcelas();
+      this.activatedRoute.queryParams.subscribe(params => {
+        if (params['parcela']) {
+          this.form.patchValue({
+            parcela: params['parcela']
+          });
+        }
+      });
+    }
   }
 
   private getHeaders() {
-  const token = typeof window !== 'undefined' ? window.localStorage.getItem('token') : '';
+    let token = '';
+    if (this.isBrowser) {
+      token = window.localStorage.getItem('token') || '';
+    }
     return {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`,
@@ -122,6 +132,7 @@ export class RecomendacionesFormComponent implements OnInit, AfterViewInit {
   }
 
   cargarParcelas() {
+    if (!this.isBrowser) return;
     this.parcelaService.obtenerParcelas().subscribe({
       next: (parcelas) => {
         this.parcelas = parcelas;
