@@ -80,8 +80,8 @@ export class MarketPricesFormComponent implements OnInit {
 
       console.log('Datos a enviar:', datosParaEnviar);
 
-      const token = localStorage.getItem('token');
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  const token = typeof window !== 'undefined' ? window.localStorage.getItem('token') : '';
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       this.http.post(this.apiUrl, datosParaEnviar, { headers }).subscribe({
         next: () => this.mensaje = 'Registro guardado correctamente',
         error: err => {

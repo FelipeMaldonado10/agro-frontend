@@ -189,7 +189,7 @@ export class CultivoService {
   // Calcular estimaciones para predicción en tiempo real
   calcularEstimaciones(datos: any): Observable<any> {
     // Obtener token del localStorage (o de AuthService si tienes uno)
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+  const token = typeof window !== 'undefined' ? window.localStorage.getItem('token') : '';
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'

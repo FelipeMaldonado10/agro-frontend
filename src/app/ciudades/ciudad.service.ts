@@ -10,7 +10,7 @@ export class CiudadService {
   constructor(private http: HttpClient) {}
 
   private getHeaders() {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : '';
+  const token = typeof window !== 'undefined' ? window.localStorage.getItem('token') : '';
     return {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`

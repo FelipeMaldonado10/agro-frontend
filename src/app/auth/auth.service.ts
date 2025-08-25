@@ -18,8 +18,8 @@ export class AuthService {
   }
 
   getUserInfo() {
-    if (typeof window === 'undefined') return null; // Solo en navegador
-    const token = window?.localStorage?.getItem('token');
+  if (typeof window === 'undefined') return null; // Solo en navegador
+  const token = typeof window !== 'undefined' ? window.localStorage.getItem('token') : null;
     if (!token) return null;
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
@@ -36,14 +36,14 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    if (typeof window === 'undefined') return false;
-    const token = window.localStorage.getItem('token');
+  if (typeof window === 'undefined') return false;
+  const token = typeof window !== 'undefined' ? window.localStorage.getItem('token') : null;
     return !!token && this.getUserInfo() !== null;
   }
 
   getToken(): string | null {
-    if (typeof window === 'undefined') return null;
-    return window.localStorage.getItem('token');
+  if (typeof window === 'undefined') return null;
+  return typeof window !== 'undefined' ? window.localStorage.getItem('token') : null;
   }
 
   isAdmin(): boolean {
