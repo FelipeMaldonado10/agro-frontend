@@ -32,12 +32,12 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client
   },
   {
-    path: ':id',
+    path: 'cultivos/:id',
     renderMode: RenderMode.Client
   },
   {
-    path: ':id/cosecha',
-    renderMode: RenderMode.Client 
+    path: 'cultivos/:id/cosecha',
+    renderMode: RenderMode.Client
   },
   {
 
