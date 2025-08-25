@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { environment } from '../../environments/environment';
@@ -22,27 +23,35 @@ export class MarketPricesComponent implements OnInit {
   productos: Producto[] = [];
   ciudades: any[] = [];
 
+  isBrowser: boolean;
+
   private apiUrl = `${environment.apiUrl}/market-prices`;
 
   constructor(
     private http: HttpClient,
     private fb: FormBuilder,
     private productoService: ProductoService,
-    private ciudadService: CiudadService
+    private ciudadService: CiudadService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
     this.form = this.fb.group({
       producto: ['', Validators.required],
       ciudad: ['', Validators.required],
       fecha: ['', Validators.required],
       precio: ['', Validators.required]
     });
-    this.loadPrices();
-    this.cargarProductos();
+    if (this.isBrowser) {
+      this.loadPrices();
+      this.cargarProductos();
+    }
   }
 
   ngOnInit() {
-    this.cargarProductos();
-    this.cargarCiudades();
+    if (this.isBrowser) {
+      this.cargarProductos();
+      this.cargarCiudades();
+    }
   }
 
   cargarCiudades(): Promise<void> {
@@ -77,6 +86,7 @@ export class MarketPricesComponent implements OnInit {
 
 
   loadPrices() {
+    if (!this.isBrowser) return;
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     this.http.get<any[]>(this.apiUrl, { headers }).subscribe({
@@ -110,6 +120,7 @@ export class MarketPricesComponent implements OnInit {
   }
 
   private enviarFormulario() {
+    if (!this.isBrowser) return;
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
@@ -142,6 +153,7 @@ export class MarketPricesComponent implements OnInit {
   }
 
   deletePrice(id: string) {
+    if (!this.isBrowser) return;
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     this.http.delete(`${this.apiUrl}/${id}`, { headers }).subscribe({
@@ -191,6 +203,7 @@ export class MarketPricesComponent implements OnInit {
   }
 
   onFileChange(event: any) {
+    if (!this.isBrowser) return;
     const file = event.target.files[0];
     if (!file) return;
     this.uploading = true;
