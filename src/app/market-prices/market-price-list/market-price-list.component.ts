@@ -54,6 +54,7 @@ export class MarketPriceListComponent implements OnInit {
       return;
     }
 
+    
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     this.http.get<MarketPrice[]>(`${environment.apiUrl}/market-prices`, { headers }).subscribe({
