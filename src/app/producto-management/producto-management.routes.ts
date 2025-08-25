@@ -14,6 +14,6 @@ export const productoManagementRoutes: Routes = [
   { 
     path: 'productos/editar/:id', 
     component: ProductoEditComponent, 
-    canActivate: [SuperadminGuard] 
+    canActivate: [SuperadminGuard], 
   }
 ];
