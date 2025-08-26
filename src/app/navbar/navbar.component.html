@@ -7,38 +7,36 @@
     <div class="nav-items-container">
       <!-- Menú horizontal (solo escritorio) -->
       <ul class="navbar-nav" *ngIf="!isMobileView">
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="isLoggedIn && !isSuperadmin && !isAdmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/cultivos" routerLinkActive="active" (click)="closeNavbar()">Inicio</a>
-        <li class="nav-item" *ngIf="isLoggedIn" (click)="closeNavbar()">
+        <li class="nav-item" *ngIf="isLoggedIn && !isSuperadmin && !isAdmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/parcelas" routerLinkActive="active">Mis Parcelas</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/precios" routerLinkActive="active">Precios del Mercado</a>
         </li>
-        <li class="nav-item" *ngIf="!isLoggedIn && !isSuperadmin" (click)="closeNavbar()">
-
+        <li class="nav-item" *ngIf="!isLoggedIn && !isSuperadmin && !isAdmin" (click)="closeNavbar()">
           <a class="nav-link" routerLink="/register" routerLinkActive="active">Registro</a>
         </li>
-        <li class="nav-item" *ngIf="!isLoggedIn && !isSuperadmin">
+        <li class="nav-item" *ngIf="!isLoggedIn && !isSuperadmin && !isAdmin">
           <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
           <a class="nav-link" routerLink="/user-management" routerLinkActive="active">Gestión de Usuarios</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn && isAdmin">
+        <li class="nav-item" *ngIf="isLoggedIn && !isAdmin && isSuperadmin">
           <a class="nav-link" routerLink="/ciudades" routerLinkActive="active">Gestión de Ciudades</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
           <a class="nav-link" routerLink="/productos/nuevo" routerLinkActive="active">Registrar Producto</a>
         </li>
-                <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
           <a class="nav-link" routerLink="/precios/nuevo" routerLinkActive="active">Registrar Precio Histórico</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn && (isSuperadmin || isAdmin)">
           <a class="nav-link" routerLink="/reportes" routerLinkActive="active">Reportes</a>
         </li>
-  
-        <li class="nav-item" *ngIf="isLoggedIn">
+        <li class="nav-item" *ngIf="isLoggedIn && !isSuperadmin && !isAdmin">
           <a class="nav-link" routerLink="/recomendaciones" routerLinkActive="active">Recomendaciones</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn">
@@ -65,25 +63,25 @@
     <!-- Menú desplegable (móvil) -->
     <div class="dropdown-menu" [ngClass]="{ 'show': menuOpen && isMobileView }">
       <ul class="dropdown-nav">
-        <li class="dropdown-item">
-          <a routerLink="/" routerLinkActive="active" (click)="closeNavbar()" aria-current="page">Inicio</a>
+        <li class="dropdown-item" *ngIf="isLoggedIn && !isAdmin && !isSuperadmin">
+          <a routerLink="/cultivos" routerLinkActive="active" (click)="closeNavbar()" aria-current="page">Inicio</a>
         </li>
         <li class="dropdown-item" *ngIf="isLoggedIn && !isAdmin && !isSuperadmin">
           <a routerLink="/parcelas" routerLinkActive="active" (click)="closeNavbar()">Mis Parcelas</a>
         </li>
-        <li class="dropdown-item" *ngIf="!isLoggedIn && !isSuperadmin">
+        <li class="dropdown-item" *ngIf="!isLoggedIn && !isSuperadmin && !isAdmin">
           <a routerLink="/register" routerLinkActive="active" (click)="closeNavbar()">Registro</a>
         </li>
-        <li class="dropdown-item" *ngIf="!isLoggedIn && !isSuperadmin">
+        <li class="dropdown-item" *ngIf="!isLoggedIn && !isSuperadmin && !isAdmin">
           <a routerLink="/login" routerLinkActive="active" (click)="closeNavbar()">Login</a>
         </li>
-        <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin">
+        <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
           <a routerLink="/user-management" routerLinkActive="active" (click)="closeNavbar()">Gestión de Usuarios</a>
         </li>
-        <li class="dropdown-item" *ngIf="isLoggedIn && isAdmin">
+        <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
           <a routerLink="/ciudades" routerLinkActive="active" (click)="closeNavbar()">Gestión de Ciudades</a>
         </li>
-        <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin">
+        <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
           <a routerLink="/productos/nuevo" routerLinkActive="active" (click)="closeNavbar()">Registrar Producto</a>
         </li>
         <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin">
@@ -92,7 +90,7 @@
         <li class="nav-item" *ngIf="isLoggedIn && (isSuperadmin || isAdmin)">
           <a class="nav-link" routerLink="/reportes" routerLinkActive="active">Reportes</a>
         </li>
-        <li class="dropdown-item" *ngIf="isLoggedIn">
+        <li class="dropdown-item" *ngIf="isLoggedIn && !isAdmin && !isSuperadmin">
           <a routerLink="/recomendaciones" routerLinkActive="active" (click)="closeNavbar()">Recomendaciones</a>
         </li>
         <li class="dropdown-item" *ngIf="isLoggedIn">
