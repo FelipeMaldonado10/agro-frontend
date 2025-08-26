@@ -1,9 +1,10 @@
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [CommonModule, TitleCasePipe],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

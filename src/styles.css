@@ -58,7 +58,12 @@ input, select, textarea {
   box-shadow: 0 2px 8px rgba(67, 160, 71, 0.10);
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4 {
   color: var(--primary-green);
+  margin-top: 0;
+}
+
+h5 {
+  color: var(black);
   margin-top: 0;
 }

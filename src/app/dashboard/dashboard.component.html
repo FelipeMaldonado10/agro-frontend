@@ -1,7 +1,21 @@
+
+
 <div class="dashboard-container">
-  <div class="dashboard-card">
-    <h2 class="dashboard-title">Dashboard</h2>
-    <p>Bienvenido, {{ user?.email }} ({{ user?.rol }})</p>
-    <p>Aquí irá el contenido principal según el rol.</p>
+  <div class="dashboard-card welcome-card" style="backdrop-filter: blur(2px); background: rgba(255,255,255,0.92); border: 1.5px solid #b9f6ca; box-shadow: 0 8px 32px rgba(67,160,71,0.13);">
+    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 1.5em;">
+      <!-- <img src="assets/logo-agro.png" alt="AgroGestión" style="height:72px;width:72px;object-fit:contain;filter: drop-shadow(0 2px 8px #b9f6ca);" /> -->
+    </div>
+    <h1 style="font-size:2.5em; font-weight:800; color:#388e3c; margin-bottom:0.2em; letter-spacing:-1px;">¡Bienvenido a AgroTracker!</h1>
+    <p style="font-size:1.25em; color:#4e944f; margin-bottom:1.5em;">La plataforma inteligente para la gestión agrícola moderna.</p>
+    <div style="margin-bottom:1.5em; display: flex; justify-content: center; align-items: center; gap: 0.7em;">
+      <span style="display:inline-block; background:#e8f5e9; color:#388e3c; border-radius:999px; padding:0.5em 1.2em; font-weight:600; font-size:1em; box-shadow:0 1px 4px #b9f6ca;">{{ user?.nombre }}</span>
+      <span style="display:inline-block; background:#e3f2fd; color:#1976d2; border-radius:999px; padding:0.5em 1.2em; font-weight:600; font-size:1em; box-shadow:0 1px 4px #b9f6ca;">Rol: {{ user?.rol | titlecase }}</span>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:0.5em; align-items:center; color:#555; font-size:1.08em; margin-bottom:1.5em;">
+      <span><span style="font-size:1.3em;">🌱</span> Visualiza reportes de cultivos, ingresos y tendencias.</span>
+      <span><span style="font-size:1.3em;">📊</span> Toma decisiones informadas con datos en tiempo real.</span>
+      <span><span style="font-size:1.3em;">🔒</span> Tu información está protegida y segura.</span>
+      <span><span style="font-size:1.3em;">🤝</span> ¡Estamos aquí para ayudarte a crecer!</span>
+    </div>
   </div>
 </div>

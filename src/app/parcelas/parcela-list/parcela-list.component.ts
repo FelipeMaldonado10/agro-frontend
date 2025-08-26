@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ParcelaService } from '../parcela.service';
+import { Subscription } from 'rxjs';
 import { CultivoService } from '../../cultivos/cultivo.service';
+import { ParcelaService } from '../parcela.service';
 
 @Component({
   selector: 'app-parcela-list',
@@ -53,14 +53,13 @@ import { CultivoService } from '../../cultivos/cultivo.service';
                         [disabled]="actualizacionesEnCurso[parcela._id]">
                   {{ obtenerTextoBotonActualizar(parcela._id) }}
                 </button>
-                
-                <button class="btn btn-sm btn-primary me-2" 
+
+                <button class="btn btn-sm btn-primary me-2"
                         [routerLink]="['/parcelas', parcela._id]">
                   Ver Detalles
                 </button>
-                
                 <!-- Botón para ver cultivos si tiene cultivos activos -->
-                <button class="btn btn-sm btn-success me-2" 
+                <button class="btn btn-sm btn-success me-2" style="margin-top: 0.5em;"
                         *ngIf="(cultivosPorParcela[parcela._id] || []).length > 0"
                         [routerLink]="['/cultivos']"
                         [queryParams]="{parcela: parcela._id}">
@@ -68,7 +67,7 @@ import { CultivoService } from '../../cultivos/cultivo.service';
                 </button>
                 
                 <!-- Botón para solicitar recomendaciones si no tiene cultivos activos -->
-                <button class="btn btn-sm btn-warning me-2" 
+                <button class="btn btn-sm btn-warning me-2" style="margin-top: 0.5em;"
                         *ngIf="(cultivosPorParcela[parcela._id] || []).length === 0"
                         [routerLink]="['/recomendaciones']"
                         [queryParams]="{parcela: parcela._id}">

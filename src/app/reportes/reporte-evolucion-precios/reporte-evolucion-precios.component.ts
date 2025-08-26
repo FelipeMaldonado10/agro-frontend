@@ -1,14 +1,14 @@
 import { CommonModule, DatePipe, DecimalPipe, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {
-  ApexAxisChartSeries,
-  ApexChart,
-  ApexDataLabels,
-  ApexStroke,
-  ApexTitleSubtitle,
-  ApexTooltip,
-  ApexXAxis,
-  ApexYAxis
+    ApexAxisChartSeries,
+    ApexChart,
+    ApexDataLabels,
+    ApexStroke,
+    ApexTitleSubtitle,
+    ApexTooltip,
+    ApexXAxis,
+    ApexYAxis
 } from 'ng-apexcharts';
 import { ReportesService } from '../reportes.service';
 
