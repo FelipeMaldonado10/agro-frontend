@@ -21,16 +21,16 @@
         <li class="nav-item" *ngIf="!isLoggedIn && !isSuperadmin && !isAdmin">
           <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
           <a class="nav-link" routerLink="/user-management" routerLinkActive="active">Gestión de Usuarios</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn && !isAdmin && isSuperadmin">
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
           <a class="nav-link" routerLink="/ciudades" routerLinkActive="active">Gestión de Ciudades</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
           <a class="nav-link" routerLink="/productos/nuevo" routerLinkActive="active">Registrar Producto</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
           <a class="nav-link" routerLink="/precios/nuevo" routerLinkActive="active">Registrar Precio Histórico</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn && (isSuperadmin || isAdmin)">
