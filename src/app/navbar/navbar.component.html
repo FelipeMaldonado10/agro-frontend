@@ -28,9 +28,6 @@
           <a class="nav-link" routerLink="/ciudades" routerLinkActive="active">Gestión de Ciudades</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
-          <a class="nav-link" routerLink="/productos/nuevo" routerLinkActive="active">Registrar Producto</a>
-        </li>
-        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
           <a class="nav-link" routerLink="/productos" routerLinkActive="active">Gestionar Producto</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
@@ -84,8 +81,8 @@
         <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
           <a routerLink="/ciudades" routerLinkActive="active" (click)="closeNavbar()">Gestión de Ciudades</a>
         </li>
-        <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin && !isAdmin">
-          <a routerLink="/productos/nuevo" routerLinkActive="active" (click)="closeNavbar()">Registrar Producto</a>
+        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
+          <a class="nav-link" routerLink="/productos" routerLinkActive="active">Gestionar Producto</a>
         </li>
         <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin">
           <a routerLink="/precios/nuevo" routerLinkActive="active" (click)="closeNavbar()">Registrar Precio Histórico</a>
