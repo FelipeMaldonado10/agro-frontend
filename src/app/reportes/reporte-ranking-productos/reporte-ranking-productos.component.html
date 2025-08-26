@@ -1,0 +1,59 @@
+<h3 class="mt-6 mb-2">Ranking por Total Sembrado</h3>
+<app-ssr-safe-apexchart
+	[series]="chartOptionsSembrado.series"
+	[chart]="chartOptionsSembrado.chart"
+	[xaxis]="chartOptionsSembrado.xaxis"
+	[yaxis]="chartOptionsSembrado.yaxis"
+	[title]="chartOptionsSembrado.title"
+	[colors]="chartOptionsSembrado.colors"
+	[dataLabels]="chartOptionsSembrado.dataLabels"
+	[tooltip]="chartOptionsSembrado.tooltip"
+	[plotOptions]="chartOptionsSembrado.plotOptions"
+	[style]="'max-width: 900px; margin: 0 auto; display: block;'"
+></app-ssr-safe-apexchart>
+<div class="overflow-x-auto mt-4 mb-8">
+	<table class="min-w-full border text-xs">
+		<thead>
+			<tr>
+				<th class="border px-2 py-1">Producto</th>
+				<th class="border px-2 py-1">Total Sembrado</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let row of datosSembrado">
+				<td class="border px-2 py-1">{{ row.producto }}</td>
+				<td class="border px-2 py-1">{{ row.totalSembrado | number:'1.0-0' }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<h3 class="mt-6 mb-2">Ranking por Total Cosechado</h3>
+<app-ssr-safe-apexchart
+	[series]="chartOptionsCosechado.series"
+	[chart]="chartOptionsCosechado.chart"
+	[xaxis]="chartOptionsCosechado.xaxis"
+	[yaxis]="chartOptionsCosechado.yaxis"
+	[title]="chartOptionsCosechado.title"
+	[colors]="chartOptionsCosechado.colors"
+	[dataLabels]="chartOptionsCosechado.dataLabels"
+	[tooltip]="chartOptionsCosechado.tooltip"
+	[plotOptions]="chartOptionsCosechado.plotOptions"
+	[style]="'max-width: 900px; margin: 0 auto; display: block;'"
+></app-ssr-safe-apexchart>
+<div class="overflow-x-auto mt-4 mb-8">
+	<table class="min-w-full border text-xs">
+		<thead>
+			<tr>
+				<th class="border px-2 py-1">Producto</th>
+				<th class="border px-2 py-1">Total Cosechado</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let row of datosCosechado">
+				<td class="border px-2 py-1">{{ row.producto }}</td>
+				<td class="border px-2 py-1">{{ row.totalCosechado | number:'1.0-0' }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

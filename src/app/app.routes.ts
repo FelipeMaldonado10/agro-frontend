@@ -43,12 +43,18 @@ export const routes: Routes = [
     ...MARKET_PRICES_ROUTES,
     ...marketPricesManagementRoutes,
     ...productoManagementRoutes,
-    ...recomendacionesRoutes,
-    ...cultivoRoutes,
+        ...recomendacionesRoutes,
+        ...cultivoRoutes,
 
-    { path: 'market-prices/:id', component: MarketPriceDetailComponent },
+        // Rutas de Reportes (Lazy load para mejor performance)
+        {
+            path: 'reportes',
+            loadChildren: () => import('./reportes/reportes-routing.module').then(m => m.ReportesRoutingModule),
+            canActivate: [AdminGuard]
+        },
 
+        { path: 'market-prices/:id', component: MarketPriceDetailComponent },
 
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-    { path: '**', redirectTo: '/dashboard' }
+        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+        { path: '**', redirectTo: '/dashboard' }
 ];

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule, ActivatedRoute } from '@angular/router';
-import { CultivoService, Cultivo } from '../cultivo.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Cultivo, CultivoService } from '../cultivo.service';
 
 @Component({
   selector: 'app-cultivo-list',
@@ -94,7 +94,7 @@ import { CultivoService, Cultivo } from '../cultivo.service';
             <!-- Progreso del cultivo -->
             <div *ngIf="cultivo.progreso_cultivo !== undefined" class="mt-4">
               <div class="flex justify-between text-sm text-gray-600 mb-1">
-                <span>Progreso del cultivo</span>
+                <span>Progreso del cultivo: </span>
                 <span>{{ cultivo.progreso_cultivo }}%</span>
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2">

@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterLink } from '@angular/router';
+import { Component } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterModule } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -18,6 +17,14 @@ export class NavbarComponent {
   isAdmin = false;
   isProductor = false;
   menuOpen = false;
+  reportesOpen = false;
+  toggleReportes() {
+    this.reportesOpen = !this.reportesOpen;
+  }
+
+  closeReportes() {
+    this.reportesOpen = false;
+  }
   isMobileView = false;
 
   private resizeTimeout: any;

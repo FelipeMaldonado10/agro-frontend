@@ -1,0 +1,46 @@
+
+<h2>Filtrado Temporal</h2>
+<form class="mb-3" (ngSubmit)="buscar()">
+	<div class="row g-2 align-items-end">
+		<div class="col-auto">
+			<label for="fechaInicio" class="form-label">Fecha inicio</label>
+			<input id="fechaInicio" type="date" class="form-control" [(ngModel)]="fechaInicio" name="fechaInicio" required>
+		</div>
+		<div class="col-auto">
+			<label for="fechaFin" class="form-label">Fecha fin</label>
+			<input id="fechaFin" type="date" class="form-control" [(ngModel)]="fechaFin" name="fechaFin" required>
+		</div>
+		<div class="col-auto">
+			<button type="submit" class="btn btn-primary">Buscar</button>
+		</div>
+	</div>
+</form>
+<div *ngIf="loading">Cargando...</div>
+<div *ngIf="error && !loading" class="alert alert-danger">{{ error }}</div>
+<div *ngIf="!loading && !error && datos.length">
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Fecha</th>
+				<th>Producto</th>
+				<th>Cantidad</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let d of datos">
+				<td>{{ d.fecha | date:'yyyy-MM-dd' }}</td>
+				<td>{{ d.producto }}</td>
+				<td>{{ d.cantidad | number:'1.0-2' }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+		<app-ssr-safe-apexchart
+			[series]="series"
+			[chart]="{ type: 'line', height: 350 }"
+			[xaxis]="xaxis"
+			[yaxis]="{ title: { text: 'Cantidad' } }"
+			[title]="{ text: 'Evolución por Fecha', align: 'center' }"
+			[style]="'max-width: 900px; margin: 0 auto; display: block;'"
+		></app-ssr-safe-apexchart>
+</div>

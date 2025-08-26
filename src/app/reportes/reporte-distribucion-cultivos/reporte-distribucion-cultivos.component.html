@@ -1,0 +1,34 @@
+<h2>Distribución de Cultivos</h2>
+<div *ngIf="loading">Cargando...</div>
+<div *ngIf="error && !loading" class="alert alert-danger">{{ error }}</div>
+<div *ngIf="!loading && !error">
+	<ng-container *ngIf="datos.length > 0; else sinDatos">
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Ciudad</th>
+					<th>Total de Cultivos</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let d of datos">
+					<td>{{ d.ciudad }}</td>
+					<td>{{ d.totalCultivos | number:'1.0-0' }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<app-ssr-safe-apexchart
+			[series]="chartOptions.series"
+			[chart]="chartOptions.chart"
+			[labels]="chartOptions.labels"
+			[title]="chartOptions.title"
+			[colors]="chartOptions.colors"
+			[dataLabels]="chartOptions.dataLabels"
+			[tooltip]="chartOptions.tooltip"
+			[style]="'max-width: 900px; margin: 0 auto; display: block;'"
+		></app-ssr-safe-apexchart>
+	</ng-container>
+	<ng-template #sinDatos>
+		<div class="alert alert-info">No hay datos para mostrar.</div>
+	</ng-template>
+</div>

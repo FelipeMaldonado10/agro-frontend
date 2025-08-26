@@ -1,0 +1,55 @@
+<div *ngIf="loading" class="text-center py-8">Cargando costos y ganancias...</div>
+<div *ngIf="error" class="text-red-600 py-4">{{ error }}</div>
+
+<ng-container *ngIf="!loading && !error">
+	<ng-container *ngIf="chartOptionsCostos.series && chartOptionsCostos.series.length > 0 && chartOptionsCostos.xaxis.categories.length > 0; else sinDatosCostos">
+		<app-ssr-safe-apexchart
+			[series]="chartOptionsCostos.series"
+			[chart]="chartOptionsCostos.chart"
+			[xaxis]="chartOptionsCostos.xaxis"
+			[yaxis]="chartOptionsCostos.yaxis"
+			[title]="chartOptionsCostos.title"
+			[colors]="chartOptionsCostos.colors"
+			[dataLabels]="chartOptionsCostos.dataLabels"
+			[tooltip]="chartOptionsCostos.tooltip"
+			[style]="'max-width: 900px; margin: 0 auto; display: block;'"
+		></app-ssr-safe-apexchart>
+	</ng-container>
+	<ng-template #sinDatosCostos>
+		<div class="text-center py-8 text-gray-500">No hay datos de costos para mostrar en la gráfica.</div>
+	</ng-template>
+	<ng-container *ngIf="chartOptionsGanancias.series && chartOptionsGanancias.series.length > 0 && chartOptionsGanancias.xaxis.categories.length > 0; else sinDatosGanancias">
+		<app-ssr-safe-apexchart
+			[series]="chartOptionsGanancias.series"
+			[chart]="chartOptionsGanancias.chart"
+			[xaxis]="chartOptionsGanancias.xaxis"
+			[yaxis]="chartOptionsGanancias.yaxis"
+			[title]="chartOptionsGanancias.title"
+			[colors]="chartOptionsGanancias.colors"
+			[dataLabels]="chartOptionsGanancias.dataLabels"
+			[tooltip]="chartOptionsGanancias.tooltip"
+			[style]="'max-width: 900px; margin: 0 auto; display: block;'"
+		></app-ssr-safe-apexchart>
+	</ng-container>
+	<ng-template #sinDatosGanancias>
+		<div class="text-center py-8 text-gray-500">No hay datos de ganancias para mostrar en la gráfica.</div>
+	</ng-template>
+	<div class="overflow-x-auto mt-8">
+		<table class="min-w-full border text-xs">
+			<thead>
+				<tr>
+					<th class="border px-2 py-1">Producto</th>
+					<th class="border px-2 py-1">Costos Totales</th>
+					<th class="border px-2 py-1">Ganancias Netas</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let row of datos">
+					<td class="border px-2 py-1">{{ row.producto }}</td>
+					  <td class="border px-2 py-1">{{ row.costosTotales | number:'1.0-0' }}</td>
+					  <td class="border px-2 py-1">{{ row.gananciasNetas | number:'1.0-0' }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</ng-container>

@@ -1,0 +1,36 @@
+<div *ngIf="loading" class="text-center py-8">Cargando ingresos totales...</div>
+<div *ngIf="error" class="text-red-600 py-4">{{ error }}</div>
+
+<ng-container *ngIf="!loading && !error">
+	<ng-container *ngIf="series.length > 0 && xaxis.categories.length > 0; else sinDatos">
+		<app-ssr-safe-apexchart
+			[series]="series"
+			[chart]="{ type: 'bar', height: 350 }"
+			[xaxis]="xaxis"
+			[yaxis]="chartOptions.yaxis"
+			[dataLabels]="chartOptions.dataLabels"
+			[tooltip]="chartOptions.tooltip"
+			[title]="{ text: 'Ingresos Totales por Producto', align: 'center' }"
+			[style]="'max-width: 900px; margin: 0 auto; display: block;'"
+		></app-ssr-safe-apexchart>
+	</ng-container>
+	<ng-template #sinDatos>
+		<div class="text-center py-8 text-gray-500">No hay datos para mostrar en la gráfica.</div>
+	</ng-template>
+	<div class="overflow-x-auto mt-8">
+		<table class="min-w-full border text-xs">
+			<thead>
+				<tr>
+					<th class="border px-2 py-1">Producto</th>
+					<th class="border px-2 py-1">Ingresos Totales</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let row of datos">
+					<td class="border px-2 py-1">{{ row.producto }}</td>
+					<td class="border px-2 py-1">{{ row.ingresosTotales | number:'1.2-2' }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</ng-container>

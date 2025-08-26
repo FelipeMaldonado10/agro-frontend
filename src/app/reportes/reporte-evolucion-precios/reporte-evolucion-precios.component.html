@@ -1,0 +1,47 @@
+<div *ngIf="loading" class="text-center py-8">
+	<span>Cargando evolución de precios...</span>
+</div>
+<div *ngIf="error" class="text-red-600 py-4">{{ error }}</div>
+
+<div *ngIf="!loading && !error">
+	<div class="mb-3 flex flex-wrap gap-2">
+		<label *ngFor="let producto of productos" class="inline-flex items-center gap-1">
+			<!-- <input type="checkbox" [checked]="productoChecks[producto]" (change)="toggleProducto(producto)" /> -->
+			<!-- <span>{{ producto }}</span> -->
+		</label>
+	</div>
+	<app-ssr-safe-apexchart
+		[series]="chartOptions.series || []"
+		[chart]="chartOptions.chart || { type: 'line' }"
+		[xaxis]="chartOptions.xaxis || {}"
+		[yaxis]="chartOptions.yaxis || {}"
+		[title]="chartOptions.title || {}"
+		[stroke]="chartOptions.stroke || {}"
+		[dataLabels]="chartOptions.dataLabels || {}"
+		[tooltip]="chartOptions.tooltip || {}"
+		[style]="'max-width: 1000px; margin: 0 auto; display: block;'"
+	></app-ssr-safe-apexchart>
+
+	<div class="overflow-x-auto mt-8">
+		<table class="min-w-full border text-xs">
+			<thead>
+				<tr>
+					<th class="border px-2 py-1">Producto</th>
+					<th class="border px-2 py-1">Fecha</th>
+					<th class="border px-2 py-1">Precio Promedio</th>
+					<th class="border px-2 py-1">Precio Mínimo</th>
+					<th class="border px-2 py-1">Precio Máximo</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let row of datos">
+					<td class="border px-2 py-1">{{ row.producto }}</td>
+					<td class="border px-2 py-1">{{ row.fecha | date:'yyyy-MM-dd' }}</td>
+					<td class="border px-2 py-1">{{ row.precioPromedio | number:'1.2-2' }}</td>
+					<td class="border px-2 py-1">{{ row.precioMin | number:'1.2-2' }}</td>
+					<td class="border px-2 py-1">{{ row.precioMax | number:'1.2-2' }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
