@@ -14,13 +14,13 @@
     <input formControlName="precio" type="number" placeholder="Precio" required>
     <button type="submit" [disabled]="form.invalid">Agregar manualmente</button>
   </form>
-  <div class="file-upload">
+  <!-- <div class="file-upload">
     <label for="file">Subir archivo Excel/CSV:</label>
     <input id="file" type="file" (change)="onFileChange($event)" accept=".xlsx,.xls,.csv">
     <button type="button" (click)="downloadTemplate()" class="download-template">Descargar Plantilla</button>
     <span *ngIf="uploading">Subiendo archivo...</span>
     <span class="error" *ngIf="fileError">{{ fileError }}</span>
-  </div>
+  </div> -->
   <h3>Registros actuales</h3>
   <table class="prices-table">
     <thead>
