@@ -1,3 +1,49 @@
+/* Dropdown personalizado para Reportes */
+.reportes-dropdown {
+  position: relative;
+}
+.reportes-dropdown .dropdown-menu-custom {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  z-index: 1001;
+  padding: 0.5rem 0;
+  border-radius: 0.5rem;
+  animation: fadeIn 0.15s;
+}
+.reportes-dropdown .dropdown-menu-custom li {
+  list-style: none;
+}
+.reportes-dropdown .dropdown-menu-custom .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1.2rem;
+  color: #222;
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.reportes-dropdown .dropdown-menu-custom .dropdown-item:hover,
+.reportes-dropdown .dropdown-menu-custom .dropdown-item.active {
+  background: var(--primary-green, #43a047);
+  color: #fff;
+}
+.reportes-dropdown .caret {
+  font-size: 0.8em;
+  margin-left: 0.3em;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 /* Fondo y contenedor principal */
 nav {
   background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);

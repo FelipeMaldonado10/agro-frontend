@@ -31,9 +31,13 @@
         <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
           <a class="nav-link" routerLink="/productos/nuevo" routerLinkActive="active">Registrar Producto</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
+                <li class="nav-item" *ngIf="isLoggedIn && isSuperadmin">
           <a class="nav-link" routerLink="/precios/nuevo" routerLinkActive="active">Registrar Precio Histórico</a>
         </li>
+        <li class="nav-item" *ngIf="isLoggedIn && (isSuperadmin || isAdmin)">
+          <a class="nav-link" routerLink="/reportes" routerLinkActive="active">Reportes</a>
+        </li>
+  
         <li class="nav-item" *ngIf="isLoggedIn">
           <a class="nav-link" routerLink="/recomendaciones" routerLinkActive="active">Recomendaciones</a>
         </li>
@@ -84,6 +88,9 @@
         </li>
         <li class="dropdown-item" *ngIf="isLoggedIn && isSuperadmin">
           <a routerLink="/precios/nuevo" routerLinkActive="active" (click)="closeNavbar()">Registrar Precio Histórico</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && (isSuperadmin || isAdmin)">
+          <a class="nav-link" routerLink="/reportes" routerLinkActive="active">Reportes</a>
         </li>
         <li class="dropdown-item" *ngIf="isLoggedIn">
           <a routerLink="/recomendaciones" routerLinkActive="active" (click)="closeNavbar()">Recomendaciones</a>

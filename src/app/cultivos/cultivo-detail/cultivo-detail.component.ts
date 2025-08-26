@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CultivoService, Cultivo, AgregarNotaRequest } from '../cultivo.service';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { AgregarNotaRequest, Cultivo, CultivoService } from '../cultivo.service';
 
 @Component({
   selector: 'app-cultivo-detail',
@@ -79,8 +79,8 @@ import { CultivoService, Cultivo, AgregarNotaRequest } from '../cultivo.service'
               <!-- Progreso del cultivo -->
               <div *ngIf="cultivo.progreso_cultivo !== undefined" class="mt-6">
                 <div class="flex justify-between text-sm text-gray-600 mb-2">
-                  <span>Progreso del cultivo</span>
-                  <span>{{ cultivo.progreso_cultivo }}%</span>
+                  <span>Progreso del cultivo: </span>
+                  <span>{{ cultivo.progreso_cultivo }} %</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-3">
                   <div 
@@ -150,11 +150,11 @@ import { CultivoService, Cultivo, AgregarNotaRequest } from '../cultivo.service'
                       </span>
                     </div>
                   </div>
-                  <button 
+                  <!-- <button 
                     class="mt-4 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                     [routerLink]="['/cultivos', cultivo._id, 'analisis']">
                     Ver Análisis Comparativo
-                  </button>
+                  </button> -->
                 </div>
 
                 <!-- Placeholder para resultado real -->

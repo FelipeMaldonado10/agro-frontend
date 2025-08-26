@@ -1,0 +1,49 @@
+<div class="flex flex-wrap gap-4 items-center mb-4">
+	<label>Año:
+		<select [(ngModel)]="filtroAnio" (ngModelChange)="aplicarFiltros()" class="border rounded px-2 py-1">
+			<option value="">Todos</option>
+			<option *ngFor="let anio of aniosDisponibles" [value]="anio">{{ anio }}</option>
+		</select>
+	</label>
+	<label>Producto:
+		<select [(ngModel)]="filtroProducto" (ngModelChange)="aplicarFiltros()" class="border rounded px-2 py-1">
+			<option value="">Todos</option>
+			<option *ngFor="let prod of productosDisponibles" [value]="prod">{{ prod }}</option>
+		</select>
+	</label>
+</div>
+<h3 class="mt-6 mb-2">Tendencia de Oferta por Mes y Año</h3>
+<app-ssr-safe-apexchart
+	[series]="series"
+	[chart]="chartOptionsTendencia.chart"
+	[xaxis]="chartOptionsTendencia.xaxis"
+	[yaxis]="chartOptionsTendencia.yaxis"
+	[title]="chartOptionsTendencia.title"
+	[colors]="chartOptionsTendencia.colors"
+	[dataLabels]="chartOptionsTendencia.dataLabels"
+	[tooltip]="chartOptionsTendencia.tooltip"
+	[plotOptions]="chartOptionsTendencia.plotOptions"
+	[style]="'max-width: 900px; margin: 0 auto; display: block;'"
+></app-ssr-safe-apexchart>
+<div class="overflow-x-auto mt-4 mb-8">
+	<table class="min-w-full border text-xs">
+		<thead>
+			<tr>
+				<!-- <th class="border px-2 py-1">Año</th> -->
+				<th class="border px-2 py-1">Fecha</th>
+				<th *ngFor="let prod of productos" class="border px-2 py-1">{{ prod }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let i of getTendenciaIndices()">
+				<!-- <td class="border px-2 py-1">{{ periodos[i].split('-')[0] }}</td> -->
+				<td class="border px-2 py-1">{{ getPeriodoLabel(periodos[i]) }}</td>
+				<td *ngFor="let prod of productos; let j = index" class="border px-2 py-1">
+					{{ series[j]?.data[i] | number:'1.0-0' }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div *ngIf="loading" class="text-center py-8">Cargando tendencias de oferta...</div>
+<div *ngIf="error" class="text-red-600 py-4">{{ error }}</div>
